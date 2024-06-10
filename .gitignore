@@ -1,2 +1,4 @@
 #ignroe cache files
 __pycache__/
+#ignore sqlite
+*.sqlite3
