@@ -3,6 +3,7 @@ from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth import login as auth_login, logout as auth_logout
 from django.contrib.auth import authenticate
 from django.contrib.auth.decorators import login_required
+from .decorators import redirect_authenticated_user
 # Create your views here.
 
 
@@ -13,6 +14,7 @@ def index(request):
     return render(request, 'shop/index.html')
 
 #create the register view using shop/register.html template
+@redirect_authenticated_user
 def register(request):
     if request.method == 'POST':
         form = UserCreationForm(request.POST)
@@ -27,6 +29,7 @@ def register(request):
         form = UserCreationForm()
     return render(request, 'shop/register.html', {'form': form})
 #create a login view using shop/login.html template
+@redirect_authenticated_user
 def login(request):
     if request.method == 'POST':
         form = AuthenticationForm(request, data=request.POST)
