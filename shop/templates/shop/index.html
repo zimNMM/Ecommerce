@@ -13,8 +13,18 @@
         <div class="container mx-auto flex justify-between items-center">
             <div class="text-2xl font-bold text-gray-800">eShop</div>
             <div>
-                <button class="bg-blue-500 text-white px-4 py-2 rounded-md mr-2">Login</button>
-                <button class="bg-green-500 text-white px-4 py-2 rounded-md">Register</button>
+                {% if user.is_authenticated %}
+                    <a href="{% url 'logout' %}">
+                        <button class="bg-red-500 text-white px-4 py-2 rounded-md mr-2">Logout</button>
+                    </a>
+                {% else %}
+                    <a href="{% url 'login' %}">
+                        <button class="bg-blue-500 text-white px-4 py-2 rounded-md mr-2">Login</button>
+                    </a>
+                    <a href="{% url 'register' %}">
+                        <button class="bg-green-500 text-white px-4 py-2 rounded-md">Register</button>
+                    </a>
+                {% endif %}
             </div>
         </div>
     </header>
