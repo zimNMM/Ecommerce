@@ -25,7 +25,7 @@ class Product(models.Model):
     def save(self, *args, **kwargs):
         if not self.product_id:
             super().save(*args, **kwargs)
-            self.product_id = f'PRODUCT{self.pk:06d}'
+            self.product_id = f'{self.category.name}{self.pk:06d}'
         super().save(*args, **kwargs)
 #cart model with user as one to one field and created_at field
 class Cart(models.Model):
