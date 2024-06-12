@@ -19,6 +19,7 @@ def mobilephone(request):
 def laptop(request):
     return render(request, 'shop/laptop.html')
 
+#product detail view with product_id as parameter to get the product object and display the product details or 404 page if product not found
 def product_detail(request, product_id):
     product = get_object_or_404(Product, product_id=product_id)
     return render(request, 'shop/product.html', {'product': product})
