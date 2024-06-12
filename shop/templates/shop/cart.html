@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cart - eShop</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body class="bg-gray-100">
+
+    <!-- Header -->
+    <header class="bg-white shadow-md py-4">
+        <div class="container mx-auto flex justify-between items-center">
+            <div class="text-2xl font-bold text-gray-800"><a href="{% url 'index' %}">eShop</a></div>
+            <div>
+                <!-- Add other links as needed -->
+            </div>
+            <div class="flex items-center">
+                {% if user.is_authenticated %}
+                    <a href="{% url 'cart' %}" class="mr-2 flex items-center">
+                        <i class="fas fa-shopping-cart text-gray-800 mr-1"></i>
+                        <span class="text-gray-800">Cart</span>
+                    </a>
+                    <a href="{% url 'logout' %}">
+                        <button class="bg-red-500 text-white px-4 py-2 rounded-md mr-2">Logout</button>
+                    </a>
+                {% else %}
+                    <a href="{% url 'login' %}">
+                        <button class="bg-blue-500 text-white px-4 py-2 rounded-md mr-2">Login</button>
+                    </a>
+                    <a href="{% url 'register' %}">
+                        <button class="bg-green-500 text-white px-4 py-2 rounded-md">Register</button>
+                    </a>
+                {% endif %}
+            </div>
+        </div>
+    </header>
+    
+
+    <!-- Main Content -->
+    <main class="container mx-auto py-10">
+        <section class="text-center mb-12">
+            <h1 class="text-4xl font-bold text-gray-800 mb-4">Cart</h1>
+            {% if cart_items %}
+                <table class="min-w-full bg-white">
+                    <thead>
+                        <tr>
+                            <th class="py-2">Product</th>
+                            <th class="py-2">Quantity</th>
+                            <th class="py-2">Price</th>
+                            <th class="py-2">Total</th>
+                            <th class="py-2">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for item in cart_items %}
+                            <tr>
+                                <td class="py-2">{{ item.product.name }}</td>
+                                <td class="py-2">{{ item.quantity }}</td>
+                                <td class="py-2">{{ item.product.price }}€</td>
+                                <td class="py-2">{{ item.total_price|floatformat:2 }}€</td>
+                                <td class="py-2">
+                                    <form method="post" action="{% url 'remove_from_cart' item.id %}">
+                                        {% csrf_token %}
+                                        <button type="submit" class="bg-red-500 text-white px-4 py-2 rounded-md">Remove</button>
+                                    </form>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        <tr>
+                            <td colspan="3" class="py-2 font-bold text-right">Total</td>
+                            <td class="py-2 font-bold">{{ total_price|floatformat:2 }}€</td>
+                            <td class="py-2">
+                                <form method="post" action="{% url 'clear_cart' %}">
+                                    {% csrf_token %}
+                                    <button type="submit" class="bg-red-500 text-white px-4 py-2 rounded-md">Clear Cart</button>
+                                </form>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            {% else %}
+                <p>Your cart is empty.</p>
+            {% endif %}
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-4">
+        <div class="container mx-auto text-center">
+            <p>&copy; 2024 eShop. All rights reserved.</p>
+        </div>
+    </footer>
+
+</body>
+</html>

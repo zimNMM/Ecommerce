@@ -28,6 +28,10 @@ urlpatterns = [
     path('login/', views.login, name='login'),
     path('logout/', views.logout, name='logout'),
     path('product/<str:product_id>/', views.product_detail, name='product_detail'),
+    path('add-to-cart/<str:product_id>/', views.add_to_cart, name='add_to_cart'),
+    path('cart/', views.cart, name='cart'),
+    path('remove-from-cart/<int:item_id>/', views.remove_from_cart, name='remove_from_cart'),
+    path('clear-cart/', views.clear_cart, name='clear_cart'),
 ]
 
 if settings.DEBUG:
