@@ -70,8 +70,8 @@
                             <tr>
                                 <td class="py-2">{{ item.product.name }}</td>
                                 <td class="py-2">{{ item.quantity }}</td>
-                                <td class="py-2">${{ item.product.price }}</td>
-                                <td class="py-2">${{ item.total_price|floatformat:2 }}</td>
+                                <td class="py-2">{{ item.product.price }}€</td>
+                                <td class="py-2">{{ item.total_price|floatformat:2 }}€</td>
                                 <td class="py-2">
                                     <form method="post" action="{% url 'remove_from_cart' item.id %}">
                                         {% csrf_token %}
@@ -82,7 +82,7 @@
                         {% endfor %}
                         <tr>
                             <td colspan="3" class="py-2 font-bold text-right">Total</td>
-                            <td class="py-2 font-bold">${{ total_price|floatformat:2 }}</td>
+                            <td class="py-2 font-bold">{{ total_price|floatformat:2 }}€</td>
                             <td class="py-2">
                                 <form method="post" action="{% url 'clear_cart' %}">
                                     {% csrf_token %}
