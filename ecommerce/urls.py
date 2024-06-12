@@ -23,7 +23,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.index, name='index'),
     path('mobilephone/', views.mobilephone, name='mobilephone'),
-    path('laptot/', views.laptop, name='laptop'),
+    path('laptop/', views.laptop, name='laptop'),
     path('register/', views.register, name='register'),
     path('login/', views.login, name='login'),
     path('logout/', views.logout, name='logout'),
