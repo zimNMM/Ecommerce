@@ -19,8 +19,15 @@ def index(request):
 
 def mobilephone(request):
     return render(request, 'shop/mobilephone.html')
+
 def laptop(request):
     return render(request, 'shop/laptop.html')
+
+def tablet(request):
+    return render(request, 'shop/tablet.html')
+
+def accessories(request):
+    return render(request, 'shop/accessories.html')
 
 #product detail view with product_id as parameter to get the product object and display the product details or 404 page if product not found
 def product_detail(request, product_id):
