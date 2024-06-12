@@ -149,5 +149,7 @@ def checkout(request):
 
 @login_required_user
 def order_success(request, order_id):
+    if request.user != Order.objects.get(order_id=order_id).user:
+        return redirect('index')
     order = get_object_or_404(Order, order_id=order_id)
     return render(request, 'shop/order_success.html', {'order': order})
