@@ -5,7 +5,7 @@ from django.contrib.auth import authenticate
 from django.contrib import messages
 from shop.forms import OrderForm
 from .decorators import redirect_authenticated_user, login_required_user
-from .models import Order, OrderItem, Product, Cart, CartItem
+from .models import Order, OrderItem, Product, Cart, CartItem, Category
 # Create your views here.
 
 @login_required_user
@@ -21,7 +21,9 @@ def mobilephone(request):
     return render(request, 'shop/mobilephone.html')
 
 def laptop(request):
-    return render(request, 'shop/laptop.html')
+    category = get_object_or_404(Category, name="Laptops")
+    products = Product.objects.filter(category=category)
+    return render(request, 'shop/laptop.html', {'products': products})
 
 def tablet(request):
     return render(request, 'shop/tablet.html')
