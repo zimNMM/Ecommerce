@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth import login as auth_login, logout as auth_logout
 from django.contrib.auth import authenticate
-
+from django.contrib import messages
 from shop.forms import OrderForm
 from .decorators import redirect_authenticated_user, login_required_user
 from .models import Order, OrderItem, Product, Cart, CartItem
@@ -64,9 +64,26 @@ def logout(request):
 def add_to_cart(request, product_id):
     product = get_object_or_404(Product, product_id=product_id)
     cart, _ = Cart.objects.get_or_create(user=request.user)
-    cart.add_product(product.id, 1)
-    return redirect('cart')
 
+    if product.quantity > 0:
+        cart_item, created = CartItem.objects.get_or_create(cart=cart, product=product)
+        if created:
+            cart_item.quantity = 1
+            messages.success(request, f"Added {product.name} to your cart.")
+        else:
+            if cart_item.quantity < product.quantity:
+                cart_item.quantity += 1
+                messages.success(request, f"Updated quantity for {product.name}.")
+            else:
+                messages.error(request, f"Cannot add more {product.name}. Only {product.quantity} in stock.")
+                return redirect('cart')
+        cart_item.save()
+    else:
+        messages.error(request, f"{product.name} is out of stock.")
+        return redirect('cart')
+    
+    return redirect('cart')
+    
 @login_required_user
 def cart(request):
     cart, created = Cart.objects.get_or_create(user=request.user)

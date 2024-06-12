@@ -42,6 +42,18 @@
     <main class="container mx-auto py-10">
         <section class="text-center mb-12">
             <h1 class="text-4xl font-bold text-gray-800 mb-4">Cart</h1>
+
+            <!-- Messages -->
+            {% if messages %}
+                <div class="mb-4">
+                    {% for message in messages %}
+                        <div class="p-4 mb-4 text-sm {{ message.tags }}-500 bg-{{ message.tags }}-100 rounded-lg">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+
             {% if cart_items %}
                 <table class="min-w-full bg-white">
                     <thead>
@@ -58,8 +70,8 @@
                             <tr>
                                 <td class="py-2">{{ item.product.name }}</td>
                                 <td class="py-2">{{ item.quantity }}</td>
-                                <td class="py-2">{{ item.product.price }}€</td>
-                                <td class="py-2">{{ item.total_price|floatformat:2 }}€</td>
+                                <td class="py-2">${{ item.product.price }}</td>
+                                <td class="py-2">${{ item.total_price|floatformat:2 }}</td>
                                 <td class="py-2">
                                     <form method="post" action="{% url 'remove_from_cart' item.id %}">
                                         {% csrf_token %}
@@ -70,7 +82,7 @@
                         {% endfor %}
                         <tr>
                             <td colspan="3" class="py-2 font-bold text-right">Total</td>
-                            <td class="py-2 font-bold">{{ total_price|floatformat:2 }}€</td>
+                            <td class="py-2 font-bold">${{ total_price|floatformat:2 }}</td>
                             <td class="py-2">
                                 <form method="post" action="{% url 'clear_cart' %}">
                                     {% csrf_token %}
