@@ -26,7 +26,9 @@ def laptop(request):
     return render(request, 'shop/laptop.html', {'products': products})
 
 def tablet(request):
-    return render(request, 'shop/tablet.html')
+    category = get_object_or_404(Category, name="Tablets")
+    products = Product.objects.filter(category=category)
+    return render(request, 'shop/tablet.html' ,{'products': products})
 
 def accessories(request):
     return render(request, 'shop/accessories.html')
