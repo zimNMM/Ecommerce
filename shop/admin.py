@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Category, Product, Cart, CartItem, Order, OrderItem
+from shop.models import Category, Product, Cart, CartItem, Order, OrderItem, Wishlist, WishlistItem, Review
 
 class CategoryAdmin(admin.ModelAdmin):
     list_display = ('name', 'description')
@@ -31,7 +31,25 @@ class OrderAdmin(admin.ModelAdmin):
     inlines = [OrderItemInline]
     readonly_fields = ('order_id', 'created_at')
 
+class WishlistItemInline(admin.TabularInline):
+    model = WishlistItem
+    raw_id_fields = ('product',)
+
+class WishlistAdmin(admin.ModelAdmin):
+    list_display = ('user',)
+    search_fields = ('user__username',)
+    inlines = [WishlistItemInline]
+
+class ReviewAdmin(admin.ModelAdmin):
+    list_display = ('product', 'user', 'rating', 'created_at')
+    list_filter = ('created_at',)
+    search_fields = ('user__username', 'product__name')
+
+
+
 admin.site.register(Category, CategoryAdmin)
 admin.site.register(Product, ProductAdmin)
 admin.site.register(Cart, CartAdmin)
 admin.site.register(Order, OrderAdmin)
+admin.site.register(Wishlist, WishlistAdmin)
+admin.site.register(Review, ReviewAdmin)
