@@ -10,6 +10,7 @@ class Category(models.Model):
     
 #product model with category as foreign key and image field for product image upload
 class Product(models.Model):
+    product_id = models.AutoField(primary_key=True, unique=True)
     category = models.ForeignKey(Category, related_name='products', on_delete=models.CASCADE)
     name = models.CharField(max_length=200)
     description = models.TextField(blank=True, null=True)
