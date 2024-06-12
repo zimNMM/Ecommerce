@@ -1,7 +1,2 @@
 #ignroe cache files
 __pycache__/
-#ignore sqlite
-*.sqlite3
-#ignore media files and products
-media/products/
-media/
