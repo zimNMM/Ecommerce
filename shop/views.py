@@ -13,6 +13,12 @@ from .decorators import redirect_authenticated_user
 def index(request):
     return render(request, 'shop/index.html')
 
+def mobilephone(request):
+    return render(request, 'shop/mobilephone.html')
+def laptop(request):
+    return render(request, 'shop/laptop.html')
+
+
 #create the register view using shop/register.html template
 @redirect_authenticated_user
 def register(request):

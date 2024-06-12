@@ -11,7 +11,11 @@
     <!-- Header -->
     <header class="bg-white shadow-md py-4">
         <div class="container mx-auto flex justify-between items-center">
-            <div class="text-2xl font-bold text-gray-800">eShop</div>
+            <div class="text-2xl font-bold text-gray-800"><a href="{% url 'index' %}">eShop</a></div>
+            <div>
+        
+                <!-- Add other links as needed -->
+            </div>
             <div>
                 {% if user.is_authenticated %}
                     <a href="{% url 'logout' %}">
@@ -35,38 +39,45 @@
         <section class="text-center mb-12">
             <h1 class="text-4xl font-bold text-gray-800 mb-4">Welcome to eShop</h1>
             <p class="text-gray-600 mb-6">Find the best products at unbeatable prices</p>
-            <a href="#categories" class="bg-blue-500 text-white px-6 py-3 rounded-md">Shop Now</a>
+            <a href="{% url 'register' %}" class="bg-blue-500 text-white px-6 py-3 rounded-md">Shop Now</a>
         </section>
 
         <!-- Categories Section -->
-        <section id="categories">
-            <h2 class="text-3xl font-bold text-gray-800 mb-8 text-center">Categories</h2>
-            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
-                <!-- Category Card -->
-                <div class="bg-white shadow-md rounded-lg overflow-hidden">
-                    <div class="p-6">
-                        <div class="flex items-center justify-center h-16 w-16 bg-blue-100 rounded-full mb-4 mx-auto">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4zm0 5a1 1 0 011-1h16a1 1 0 011 1v9a1 1 0 01-1 1H4a1 1 0 01-1-1V9z" />
-                            </svg>
-                        </div>
-                        <h3 class="text-lg font-semibold text-gray-800 text-center">Electronics</h3>
-                    </div>
+        <!-- Categories Section -->
+<section id="categories">
+    <h2 class="text-3xl font-bold text-gray-800 mb-8 text-center">Categories</h2>
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
+        <!-- Category Card - Electronics -->
+        <div class="bg-white shadow-md rounded-lg overflow-hidden flex flex-col items-center">
+            <div class="p-6">
+                <div class="flex items-center justify-center h-16 w-16 bg-blue-100 rounded-full mb-4 mx-auto">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4zm0 5a1 1 0 011-1h16a1 1 0 011 1v9a1 1 0 01-1 1H4a1 1 0 01-1-1V9z" />
+                    </svg>
                 </div>
-                <!-- Repeat similar blocks for other categories -->
-                <div class="bg-white shadow-md rounded-lg overflow-hidden">
-                    <div class="p-6">
-                        <div class="flex items-center justify-center h-16 w-16 bg-green-100 rounded-full mb-4 mx-auto">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 11c0 3.866-3.134 7-7 7S-2 14.866-2 11 1.134 4 5 4s7 3.134 7 7zM22 11c0 3.866-3.134 7-7 7s-7-3.134-7-7 3.134-7 7-7 7 3.134 7 7z" />
-                            </svg>
-                        </div>
-                        <h3 class="text-lg font-semibold text-gray-800 text-center">Fashion</h3>
-                    </div>
-                </div>
-                <!-- Add more category cards as needed -->
+                {% comment %} <h3 class="text-lg font-semibold text-gray-800 text-center">Electronics</h3> {% endcomment %}
+                <a href="{% url 'laptop' %}" class="bg-blue-500 text-white px-6 py-3 rounded-md ">Laptops</a>
+
             </div>
-        </section>
+        </div>
+        <!-- Category Card - Fashion -->
+<div class="bg-white shadow-md rounded-lg overflow-hidden flex flex-col items-center">
+    <div class="p-6">
+        <!-- Anchor tag moved to the left -->
+        {% comment %} <a href="{% url 'fashion' %}" class="bg-green-500 text-white px-6 py-3 rounded-md mb-4 self-start">Explore Fashion</a> {% endcomment %}
+        <div class="flex items-center justify-center h-16 w-16 bg-green-100 rounded-full mb-4 mx-auto">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 11c0 3.866-3.134 7-7 7S-2 14.866-2 11 1.134 4 5 4s7 3.134 7 7zM22 11c0 3.866-3.134 7-7 7s-7-3.134-7-7 3.134-7 7-7 7 3.134 7 7z" />
+            </svg>
+        </div>
+        {% comment %} <h3 class="text-lg font-semibold text-gray-800 text-center">Fashion</h3> {% endcomment %}
+        <!-- Anchor tag moved to the right -->
+        <a href="{% url 'mobilephone' %}" class="bg-green-500 text-white px-6 py-3 rounded-md self-end">Mobile Phones</a>
+    </div>
+</div>
+
+</section>
+
     </main>
 
     <!-- Footer -->
