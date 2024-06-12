@@ -2,8 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth import login as auth_login, logout as auth_logout
 from django.contrib.auth import authenticate
-from django.contrib.auth.decorators import login_required
-from .decorators import redirect_authenticated_user
+from .decorators import redirect_authenticated_user, login_required_user
 from .models import Product, Cart, CartItem
 # Create your views here.
 
@@ -52,19 +51,19 @@ def login(request):
         form = AuthenticationForm()
     return render(request, 'shop/login.html', {'form': form})
 #create logout 
-@login_required
+@login_required_user
 def logout(request):
     auth_logout(request)
     return redirect('login')
 
-@login_required
+@login_required_user
 def add_to_cart(request, product_id):
     product = get_object_or_404(Product, product_id=product_id)
     cart, created = Cart.objects.get_or_create(user=request.user)
     cart.add_product(product.id, 1)
     return redirect('cart')
 
-@login_required
+@login_required_user
 def cart(request):
     cart, created = Cart.objects.get_or_create(user=request.user)
     cart_items = cart.items.all()
@@ -77,13 +76,13 @@ def cart(request):
         'cart_items': cart_items,
         'total_price': total_price
     })
-@login_required
+@login_required_user
 def remove_from_cart(request, item_id):
     cart_item = get_object_or_404(CartItem, id=item_id, cart__user=request.user)
     cart_item.delete()
     return redirect('cart')
 
-@login_required
+@login_required_user
 def clear_cart(request):
     cart, created = Cart.objects.get_or_create(user=request.user)
     cart.clear()
