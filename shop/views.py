@@ -1,9 +1,10 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth import login as auth_login, logout as auth_logout
 from django.contrib.auth import authenticate
 from django.contrib.auth.decorators import login_required
 from .decorators import redirect_authenticated_user
+from .models import Product
 # Create your views here.
 
 
@@ -18,6 +19,9 @@ def mobilephone(request):
 def laptop(request):
     return render(request, 'shop/laptop.html')
 
+def product_detail(request, product_id):
+    product = get_object_or_404(Product, product_id=product_id)
+    return render(request, 'shop/product.html', {'product': product})
 
 #create the register view using shop/register.html template
 @redirect_authenticated_user

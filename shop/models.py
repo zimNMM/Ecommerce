@@ -17,9 +17,16 @@ class Product(models.Model):
     quantity = models.PositiveIntegerField()
     available = models.BooleanField(default=True)
     image = models.ImageField(upload_to='products/', blank=True, null=True)
-
+    product_id = models.CharField(max_length=100, unique=True, blank=True)
+    
     def __str__(self):
         return self.name
+    
+    def save(self, *args, **kwargs):
+        if not self.product_id:
+            super().save(*args, **kwargs)
+            self.product_id = f'PRODUCT{self.pk:06d}'
+        super().save(*args, **kwargs)
 #cart model with user as one to one field and created_at field
 class Cart(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
