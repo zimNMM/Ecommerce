@@ -16,7 +16,7 @@ class Product(models.Model):
     price = models.DecimalField(max_digits=10, decimal_places=2)
     quantity = models.PositiveIntegerField()
     available = models.BooleanField(default=True)
-    image = models.ImageField(upload_to='products/', blank=True, null=True)
+    image = models.ImageField(upload_to='products/', blank=False, null=False)
     product_id = models.CharField(max_length=100, unique=True, blank=True)
     
     def __str__(self):
