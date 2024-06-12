@@ -2,8 +2,10 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth import login as auth_login, logout as auth_logout
 from django.contrib.auth import authenticate
+
+from shop.forms import OrderForm
 from .decorators import redirect_authenticated_user, login_required_user
-from .models import Product, Cart, CartItem
+from .models import Order, OrderItem, Product, Cart, CartItem
 # Create your views here.
 
 
@@ -59,7 +61,7 @@ def logout(request):
 @login_required_user
 def add_to_cart(request, product_id):
     product = get_object_or_404(Product, product_id=product_id)
-    cart, created = Cart.objects.get_or_create(user=request.user)
+    cart, _ = Cart.objects.get_or_create(user=request.user)
     cart.add_product(product.id, 1)
     return redirect('cart')
 
@@ -84,6 +86,50 @@ def remove_from_cart(request, item_id):
 
 @login_required_user
 def clear_cart(request):
-    cart, created = Cart.objects.get_or_create(user=request.user)
+    cart, _ = Cart.objects.get_or_create(user=request.user)
     cart.clear()
     return redirect('cart')
+    
+@login_required_user
+def checkout(request):
+    cart, _ = Cart.objects.get_or_create(user=request.user)
+    cart_items = cart.items.all()
+    for item in cart_items:
+        item.total_price = item.product.price * item.quantity
+
+    total_price = sum(item.total_price for item in cart_items)
+
+    if request.method == 'POST':
+        form = OrderForm(request.POST)
+        if form.is_valid():
+            order = form.save(commit=False)
+            order.user = request.user
+            order.status = 'processing'
+            order.save()
+
+            for item in cart_items:
+                OrderItem.objects.create(
+                    order=order,
+                    product=item.product,
+                    quantity=item.quantity
+                )
+                # Reduce the quantity of the product
+                item.product.quantity -= item.quantity
+                item.product.save()
+
+            cart.clear()
+            return redirect('order_success', order_id=order.order_id)
+    else:
+        form = OrderForm()
+
+    return render(request, 'shop/checkout.html', {
+        'cart': cart,
+        'cart_items': cart_items,
+        'total_price': total_price,
+        'form': form
+    })
+
+@login_required_user
+def order_success(request, order_id):
+    order = get_object_or_404(Order, order_id=order_id)
+    return render(request, 'shop/order_success.html', {'order': order})
