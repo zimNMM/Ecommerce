@@ -8,8 +8,10 @@ from .decorators import redirect_authenticated_user, login_required_user
 from .models import Order, OrderItem, Product, Cart, CartItem
 # Create your views here.
 
-
-
+@login_required_user
+def my_orders(request):
+    orders = Order.objects.filter(user=request.user).order_by('-created_at')
+    return render(request, 'shop/my_orders.html', {'orders': orders})
 
 #index view
 def index(request):
@@ -113,7 +115,6 @@ def checkout(request):
                     product=item.product,
                     quantity=item.quantity
                 )
-                # Reduce the quantity of the product
                 item.product.quantity -= item.quantity
                 item.product.save()
 

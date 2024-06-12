@@ -34,6 +34,7 @@ urlpatterns = [
     path('clear-cart/', views.clear_cart, name='clear_cart'),
     path('checkout/', views.checkout, name='checkout'),
     path('order-success/<str:order_id>/', views.order_success, name='order_success'),
+    path('my-orders/', views.my_orders, name='my_orders'),
 
 ]
 
