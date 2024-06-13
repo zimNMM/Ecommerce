@@ -5,3 +5,5 @@ __pycache__/
 #ignore media files and products
 media/products/
 media/
+#igrnoe .DS_Store
+.DS_Store
