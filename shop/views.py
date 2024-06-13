@@ -18,20 +18,28 @@ def index(request):
     return render(request, 'shop/index.html')
 
 def mobilephone(request):
-    return render(request, 'shop/mobilephone.html')
+    category = get_object_or_404(Category, name="Mobile Phones")
+    category_description = category.description
+    products = Product.objects.filter(category=category)
+    return render(request, 'shop/mobilephone.html', {'products': products, 'category_description': category_description})
 
 def laptop(request):
     category = get_object_or_404(Category, name="Laptops")
+    category_description = category.description
     products = Product.objects.filter(category=category)
-    return render(request, 'shop/laptop.html', {'products': products})
+    return render(request, 'shop/laptop.html', {'products': products, 'category_description': category_description})
 
 def tablet(request):
     category = get_object_or_404(Category, name="Tablets")
+    category_description = category.description
     products = Product.objects.filter(category=category)
-    return render(request, 'shop/tablet.html' ,{'products': products})
+    return render(request, 'shop/tablet.html' ,{'products': products, 'category_description': category_description})
 
 def accessories(request):
-    return render(request, 'shop/accessories.html')
+    category = get_object_or_404(Category, name="Accessories")
+    category_description = category.description
+    products = Product.objects.filter(category=category)
+    return render(request, 'shop/accessories.html', {'products': products, 'category_description': category_description})
 
 #product detail view with product_id as parameter to get the product object and display the product details or 404 page if product not found
 def product_detail(request, product_id):
