@@ -172,3 +172,24 @@ def order_success(request, order_id):
         return redirect('index')
     order = get_object_or_404(Order, order_id=order_id)
     return render(request, 'shop/order_success.html', {'order': order})
+
+@login_required_user
+def wishlist(request):
+    wishlist, _ = Wishlist.objects.get_or_create(user=request.user)
+    wishlist_items = wishlist.products.all()
+    return render(request, 'shop/wishlist.html', {'wishlist_items': wishlist_items})
+
+@login_required_user
+def add_to_wishlist(request, product_id):
+    product = get_object_or_404(Product, product_id=product_id)
+    wishlist, _ = Wishlist.objects.get_or_create(user=request.user)
+    WishlistItem.objects.get_or_create(wishlist=wishlist, product=product)
+    return redirect('wishlist')
+
+@login_required_user
+def remove_from_wishlist(request, product_id):
+    product = get_object_or_404(Product, product_id=product_id)
+    wishlist = get_object_or_404(Wishlist, user=request.user)
+    wishlist_item = get_object_or_404(WishlistItem, wishlist=wishlist, product=product)
+    wishlist_item.delete()
+    return redirect('wishlist')
