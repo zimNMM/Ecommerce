@@ -41,24 +41,6 @@ def accessories(request):
     products = Product.objects.filter(category=category)
     return render(request, 'shop/accessories.html', {'products': products, 'category_description': category_description})
 
-@login_required_user
-def wishlist(request):
-    wishlist, created = Wishlist.objects.get_or_create(user=request.user)
-    return render(request, 'shop/wishlist.html', {'wishlist': wishlist})
-
-@login_required_user
-def add_to_wishlist(request, product_id):
-    product = get_object_or_404(Product, id=product_id)
-    wishlist, created = Wishlist.objects.get_or_create(user=request.user)
-    WishlistItem.objects.get_or_create(wishlist=wishlist, product=product)
-    return redirect('wishlist')
-
-@login_required_user
-def remove_from_wishlist(request, item_id):
-    item = get_object_or_404(WishlistItem, id=item_id)
-    item.delete()
-    return redirect('wishlist')
-
 #product detail view with product_id as parameter to get the product object and display the product details or 404 page if product not found
 def product_detail(request, product_id):
     product = get_object_or_404(Product, product_id=product_id)
