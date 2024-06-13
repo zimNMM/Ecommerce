@@ -7,7 +7,7 @@
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
-<body class="bg-gray-100">
+<body class="bg-gray-100 flex flex-col min-h-screen">
 
     <!-- Header -->
     <header class="bg-white shadow-md py-4">
@@ -42,7 +42,7 @@
     </header>
 
     <!-- Main Content -->
-    <main class="container mx-auto py-10">
+    <main class="container mx-auto py-10 flex-grow">
         <!-- Hero Section -->
         <section class="text-center mb-12">
             <h1 class="text-4xl font-bold text-gray-800 mb-4">Welcome to eShop</h1>
@@ -98,10 +98,10 @@
     </main>
 
     <!-- Footer -->
-    <footer class="bg-gray-800 text-white py-4">
-        {% comment %} <div class="container mx-auto text-center">
+    <footer class="bg-gray-800 text-white py-4 mt-auto">
+        <div class="container mx-auto text-center">
             <p>&copy; 2024 eShop. All rights reserved.</p>
-        </div> {% endcomment %}
+        </div>
     </footer>
 
 </body>
