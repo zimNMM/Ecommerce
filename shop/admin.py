@@ -1,3 +1,4 @@
+import random
 from django.contrib import admin
 from shop.models import Category, Product, Cart, CartItem, Order, OrderItem, Wishlist, WishlistItem, Review
 
@@ -24,12 +25,49 @@ class OrderItemInline(admin.TabularInline):
     model = OrderItem
     raw_id_fields = ('product',)
 
+def generate_tracking_id():
+    return ''.join([str(random.randint(0, 9)) for _ in range(10)])
+
+def mark_as_shipped(modeladmin, request, queryset):
+    for order in queryset:
+        if order.status == 'processing':
+            order.tracking_id = generate_tracking_id()
+            order.status = 'shipped'
+            order.save()
+
+mark_as_shipped.short_description = "Generate tracking ID and mark as shipped (only for processing orders)"
+
+class StatusFilter(admin.SimpleListFilter):
+    title = 'Status'
+    parameter_name = 'status'
+
+    def lookups(self, request, model_admin):
+        return (
+            ('all', 'All'),
+            ('processing', 'Processing'),
+            ('shipped', 'Shipped'),
+            ('delivered', 'Delivered'),
+            ('cancelled', 'Cancelled'),
+        )
+
+    def queryset(self, request, queryset):
+        if self.value() == 'processing':
+            return queryset.filter(status='processing')
+        elif self.value() == 'shipped':
+            return queryset.filter(status='shipped')
+        elif self.value() == 'delivered':
+            return queryset.filter(status='delivered')
+        elif self.value() == 'cancelled':
+            return queryset.filter(status='cancelled')
+        return queryset
+
 class OrderAdmin(admin.ModelAdmin):
     list_display = ('order_id', 'user', 'fullname', 'address', 'status', 'created_at', 'tracking_id')
-    list_filter = ('status', 'created_at')
+    list_filter = ('status', StatusFilter, 'created_at')
     search_fields = ('order_id', 'user__username', 'fullname')
     inlines = [OrderItemInline]
     readonly_fields = ('order_id', 'created_at')
+    actions = [mark_as_shipped]
 
 class WishlistItemInline(admin.TabularInline):
     model = WishlistItem
@@ -44,8 +82,6 @@ class ReviewAdmin(admin.ModelAdmin):
     list_display = ('product', 'user', 'rating', 'created_at')
     list_filter = ('created_at',)
     search_fields = ('user__username', 'product__name')
-
-
 
 admin.site.register(Category, CategoryAdmin)
 admin.site.register(Product, ProductAdmin)
