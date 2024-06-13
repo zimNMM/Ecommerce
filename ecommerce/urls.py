@@ -37,9 +37,6 @@ urlpatterns = [
     path('checkout/', views.checkout, name='checkout'),
     path('order-success/<str:order_id>/', views.order_success, name='order_success'),
     path('my-orders/', views.my_orders, name='my_orders'),
-    path('wishlist/', views.wishlist, name='wishlist'),
-    path('add-to-wishlist/<str:product_id>/', views.add_to_wishlist, name='add_to_wishlist'),
-    path('remove-from-wishlist/<int:item_id>/', views.remove_from_wishlist, name='remove_from_wishlist'),
 
 ]
 
