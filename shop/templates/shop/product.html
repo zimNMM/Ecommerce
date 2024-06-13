@@ -53,9 +53,11 @@
             <form method="post" action="{% url 'add_to_cart' product.product_id %}">
                 {% csrf_token %}
                 <button type="submit" class="bg-green-500 text-white px-6 py-3 rounded-md">Add to Cart</button>
+                <a href="{% url 'add_to_wishlist' product.product_id %}" class="bg-gray-200 text-gray-800 px-4 py-2 rounded-md mt-2 inline-block ml-2">Add to Wishlist</a>    
             </form>
             {% else %}
             <a href="{% url 'login'%}"><button type="submit" class="bg-green-500 text-white px-6 py-3 rounded-md">Add to Cart</button></a>
+            
             {% endif %}
 
         </section>
