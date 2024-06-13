@@ -1,18 +1,21 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Laptops - eShop</title>
+    <title>Accessories - eShop</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <style>
     .product-image {
-        width: 512px;
-        height: 512px;
-        object-fit: cover;
+        width: 100%;
+        height: 300px;
+        object-fit: contain;
+        transition: transform 0.3s ease-in-out;
+    }
+    .product-card:hover .product-image {
+        transform: scale(1.05);
     }
 </style>
 <body class="bg-gray-100 flex flex-col min-h-screen">
@@ -55,19 +58,21 @@
             <p class="text-gray-600">{{ category_description }}</p>
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {% for product in products %}
-                    <div class="bg-white shadow-md rounded-lg overflow-hidden">
+                    <div class="bg-white shadow-md rounded-lg overflow-hidden product-card flex flex-col">
                         <a href="{% url 'product_detail' product.product_id %}">
                             <img src="{{ product.image.url }}" alt="{{ product.name }}" class="product-image">
                         </a>
-                        <div class="p-4">
+                        <div class="p-4 flex flex-col flex-grow">
                             <h2 class="text-xl font-bold text-gray-800">{{ product.name }}</h2>
-                            <p class="text-gray-600">{{ product.description }}</p>
+                            <p class="text-gray-600 flex-grow">{{ product.description }}</p>
                             <p class="text-gray-800 font-bold">{{ product.price }}€</p>
                             <p class="text-gray-600">Available: {{ product.quantity }}</p>
-                            <a href="{% url 'add_to_cart' product.product_id %}" class="bg-blue-500 text-white px-4 py-2 rounded-md mt-2 inline-block">Add to Cart</a>
-                            {% if user.is_authenticated %}
-                            <a href="{% url 'add_to_wishlist' product.product_id %}" class="bg-gray-200 text-gray-800 px-4 py-2 rounded-md mt-2 inline-block ml-2">Add to Wishlist</a>
-                        {% endif %}
+                            <div class="mt-2">
+                                <a href="{% url 'add_to_cart' product.product_id %}" class="bg-blue-500 text-white px-4 py-2 rounded-md inline-block">Add to Cart</a>
+                                {% if user.is_authenticated %}
+                                    <a href="{% url 'add_to_wishlist' product.product_id %}" class="bg-gray-200 text-gray-800 px-4 py-2 rounded-md inline-block ml-2">Add to Wishlist</a>
+                                {% endif %}
+                            </div>
                         </div>
                     </div>
                 {% endfor %}
