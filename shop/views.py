@@ -21,7 +21,7 @@ def add_review(request, product_id):
         comment = request.POST.get('comment')
         existing_review = Review.objects.filter(product=product, user=request.user).first()
         if existing_review:
-            messages.error(request, "You have already submitted a review for this product.")
+            pass
         else:
             review = Review.objects.create(
                 product=product,
@@ -29,7 +29,6 @@ def add_review(request, product_id):
                 rating=rating,
                 comment=comment
             )
-            messages.success(request, "Your review has been added.")
     return redirect('product_detail', product_id=product_id)
 
 @login_required_user
