@@ -58,8 +58,18 @@
             {% else %}
             <a href="{% url 'login'%}"><button type="submit" class="bg-green-500 text-white px-6 py-3 rounded-md">Add to Cart</button></a>
             {% endif %}
-
         </section>
+        
+        <!-- Display Messages -->
+        {% if messages %}
+        <div class="container mx-auto mb-6">
+            {% for message in messages %}
+                <p class="bg-{{ message.tags }}-100 text-{{ message.tags }}-800 border border-{{ message.tags }}-300 rounded-md p-4 mb-2">
+                    {{ message }}
+                </p>
+            {% endfor %}
+        </div>
+        {% endif %}
         
         <!-- Reviews Section -->
         <section class="mb-12">
@@ -100,7 +110,6 @@
                             {% endif %}
                         {% endfor %}
                     </div>
-                    
                 </div>
                 <div class="text-gray-700 mb-2">{{ review.comment }}</div>
                 <div class="text-gray-500 text-sm">{{ review.created_at|date:"F j, Y, g:i a" }}</div>
@@ -113,7 +122,6 @@
             </div>
             {% endfor %}
         </section>
-
     </main>
 
     <!-- Footer -->
@@ -122,6 +130,5 @@
             <p>&copy; 2024 eShop. All rights reserved.</p>
         </div>
     </footer>
-
 </body>
 </html>
