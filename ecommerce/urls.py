@@ -40,7 +40,8 @@ urlpatterns = [
     path('wishlist/', views.wishlist, name='wishlist'),
     path('add-to-wishlist/<str:product_id>/', views.add_to_wishlist, name='add_to_wishlist'),
     path('remove-from-wishlist/<str:product_id>/', views.remove_from_wishlist, name='remove_from_wishlist'),
-
+    path('add-review/<str:product_id>/', views.add_review, name='add_review'),
+    path('delete-review/<int:review_id>/', views.delete_review, name='delete_review'),
 ]
 
 if settings.DEBUG:

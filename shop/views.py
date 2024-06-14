@@ -5,7 +5,7 @@ from django.contrib.auth import authenticate
 from django.contrib import messages
 from shop.forms import OrderForm
 from .decorators import redirect_authenticated_user, login_required_user
-from .models import Order, OrderItem, Product, Cart, CartItem, Category,Wishlist,WishlistItem
+from .models import Order, OrderItem, Product, Cart, CartItem, Category,Wishlist,WishlistItem, Review
 # Create your views here.
 
 @login_required_user
@@ -13,6 +13,34 @@ def my_orders(request):
     orders = Order.objects.filter(user=request.user).order_by('-created_at')
     return render(request, 'shop/my_orders.html', {'orders': orders})
 
+@login_required_user
+def add_review(request, product_id):
+    product = get_object_or_404(Product, product_id=product_id)
+    if request.method == 'POST':
+        rating = request.POST.get('rating')
+        comment = request.POST.get('comment')
+        existing_review = Review.objects.filter(product=product, user=request.user).first()
+        if existing_review:
+            messages.error(request, "You have already submitted a review for this product.")
+        else:
+            review = Review.objects.create(
+                product=product,
+                user=request.user,
+                rating=rating,
+                comment=comment
+            )
+            messages.success(request, "Your review has been added.")
+    return redirect('product_detail', product_id=product_id)
+
+@login_required_user
+def delete_review(request, review_id):
+    review = get_object_or_404(Review, id=review_id)
+    if request.user == review.user:
+        review.delete()
+        messages.success(request, "Your review has been deleted.")
+    else:
+        messages.error(request, "You cannot delete this review.")
+    return redirect('product_detail', product_id=review.product.product_id)
 #index view
 def index(request):
     return render(request, 'shop/index.html')

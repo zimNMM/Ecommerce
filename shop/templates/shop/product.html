@@ -57,10 +57,63 @@
             </form>
             {% else %}
             <a href="{% url 'login'%}"><button type="submit" class="bg-green-500 text-white px-6 py-3 rounded-md">Add to Cart</button></a>
-            
             {% endif %}
 
         </section>
+        
+        <!-- Reviews Section -->
+        <section class="mb-12">
+            <h2 class="text-3xl font-bold text-gray-800 mb-4">Reviews</h2>
+            {% if user.is_authenticated %}
+            <form method="post" action="{% url 'add_review' product.product_id %}" class="mb-6">
+                {% csrf_token %}
+                <div class="mb-4">
+                    <label for="rating" class="block text-gray-700">Rating</label>
+                    <select name="rating" id="rating" class="block w-full mt-1">
+                        <option value="1">1 - Very Poor</option>
+                        <option value="2">2 - Poor</option>
+                        <option value="3">3 - Average</option>
+                        <option value="4">4 - Good</option>
+                        <option value="5">5 - Excellent</option>
+                    </select>
+                </div>
+                <div class="mb-4">
+                    <label for="comment" class="block text-gray-700">Comment</label>
+                    <textarea name="comment" id="comment" rows="3" class="block w-full mt-1"></textarea>
+                </div>
+                <button type="submit" class="bg-blue-500 text-white px-6 py-3 rounded-md">Submit Review</button>
+            </form>
+            {% else %}
+            <p class="text-gray-700 mb-6">You must be <a href="{% url 'login' %}" class="text-blue-500">logged in</a> to submit a review.</p>
+            {% endif %}
+            
+            {% for review in product.reviews.all %}
+            <div class="bg-white shadow-md rounded-lg p-4 mb-4">
+                <div class="flex justify-between items-center mb-2">
+                    <div class="text-lg font-bold text-gray-800">{{ review.user.username }}</div>
+                    <div class="text-gray-600">
+                        {% for i in "12345" %}
+                            {% if forloop.counter <= review.rating %}
+                                <i class="fas fa-star text-yellow-500"></i>
+                            {% else %}
+                                <i class="fas fa-star text-gray-300"></i>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                    
+                </div>
+                <div class="text-gray-700 mb-2">{{ review.comment }}</div>
+                <div class="text-gray-500 text-sm">{{ review.created_at|date:"F j, Y, g:i a" }}</div>
+                {% if review.user == user %}
+                <form method="post" action="{% url 'delete_review' review.id %}">
+                    {% csrf_token %}
+                    <button type="submit" class="text-red-500 mt-2">Delete Review</button>
+                </form>
+                {% endif %}
+            </div>
+            {% endfor %}
+        </section>
+
     </main>
 
     <!-- Footer -->
