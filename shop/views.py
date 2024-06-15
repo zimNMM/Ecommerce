@@ -187,7 +187,6 @@ def checkout(request):
             payment_method = request.POST.get('payment_method')
             if payment_method == 'cod':
                 Payment.objects.create(order=order, method='cod')
-                messages.success(request, "Your order has been placed successfully.")
                 return redirect('order_success', order_id=order.order_id)
             else:
                 return redirect('payment', order_id=order.order_id)
