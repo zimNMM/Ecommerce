@@ -210,7 +210,6 @@ def payment(request, order_id):
             payment.order = order
             payment.method = 'card'
             payment.save()
-            messages.success(request, "Your payment has been processed successfully.")
             return redirect('order_success', order_id=order.order_id)
     else:
         form = PaymentForm()
