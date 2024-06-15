@@ -3,9 +3,9 @@ from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth import login as auth_login, logout as auth_logout
 from django.contrib.auth import authenticate
 from django.contrib import messages
-from shop.forms import OrderForm
+from shop.forms import OrderForm, PaymentForm
 from .decorators import redirect_authenticated_user, login_required_user
-from .models import Order, OrderItem, Product, Cart, CartItem, Category,Wishlist,WishlistItem, Review
+from .models import Order, OrderItem, Product, Cart, CartItem, Category,Wishlist,WishlistItem, Review, Payment
 # Create your views here.
 
 @login_required_user
@@ -183,7 +183,14 @@ def checkout(request):
                 item.product.save()
 
             cart.clear()
-            return redirect('order_success', order_id=order.order_id)
+
+            payment_method = request.POST.get('payment_method')
+            if payment_method == 'cod':
+                Payment.objects.create(order=order, method='cod')
+                messages.success(request, "Your order has been placed successfully.")
+                return redirect('order_success', order_id=order.order_id)
+            else:
+                return redirect('payment', order_id=order.order_id)
     else:
         form = OrderForm()
 
@@ -191,6 +198,26 @@ def checkout(request):
         'cart': cart,
         'cart_items': cart_items,
         'total_price': total_price,
+        'form': form
+    })
+
+@login_required_user
+def payment(request, order_id):
+    order = get_object_or_404(Order, order_id=order_id)
+    if request.method == 'POST':
+        form = PaymentForm(request.POST)
+        if form.is_valid():
+            payment = form.save(commit=False)
+            payment.order = order
+            payment.method = 'card'
+            payment.save()
+            messages.success(request, "Your payment has been processed successfully.")
+            return redirect('order_success', order_id=order.order_id)
+    else:
+        form = PaymentForm()
+
+    return render(request, 'shop/payment.html', {
+        'order': order,
         'form': form
     })
 

@@ -42,7 +42,8 @@ urlpatterns = [
     path('remove-from-wishlist/<str:product_id>/', views.remove_from_wishlist, name='remove_from_wishlist'),
     path('add-review/<str:product_id>/', views.add_review, name='add_review'),
     path('delete-review/<int:review_id>/', views.delete_review, name='delete_review'),
-]
+    path('payment/<str:order_id>/', views.payment, name='payment'),
+    ]
 
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

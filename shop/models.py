@@ -119,3 +119,19 @@ class Review(models.Model):
 
     def __str__(self):
         return f'Review by {self.user.username} for {self.product.name}'
+
+class Payment(models.Model):
+    PAYMENT_METHOD_CHOICES = (
+        ('cod', 'Cash on Delivery'),
+        ('card', 'Credit Card'),
+    )
+
+    order = models.OneToOneField('Order', on_delete=models.CASCADE, related_name='payment')
+    method = models.CharField(max_length=10, choices=PAYMENT_METHOD_CHOICES)
+    card_number = models.CharField(max_length=16, blank=True, null=True)
+    card_expiry_date = models.CharField(max_length=5, blank=True, null=True)
+    card_cvc = models.CharField(max_length=3, blank=True, null=True)
+    card_name = models.CharField(max_length=100, blank=True, null=True)
+
+    def __str__(self):
+        return f"Payment for Order {self.order.order_id}"
