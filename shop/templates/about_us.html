@@ -1,0 +1,98 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Us - eShop</title>
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <style>
+        /* Specify CSS styles for the map container */
+        #map {
+            height: 400px; /* Adjust height as needed */
+            width: 100%; /* Full width */
+        }
+    </style>
+</head>
+<body>
+
+    <header class="bg-white shadow-md py-4">
+        <div class="container mx-auto flex justify-between items-center">
+            <div class="text-2xl font-bold text-gray-800"><a href="{% url 'index' %}">eShop</a></div>
+            <div>
+                
+            </div>
+            <div class="flex items-center">
+                {% if user.is_authenticated %}
+                    <a href="{% url 'cart' %}" class="mr-2 flex items-center">
+                        <i class="fas fa-shopping-cart text-gray-800 mr-1"></i>
+                        <span class="text-gray-800">Cart</span>
+                    </a>
+                    <a href="{% url 'wishlist' %}" class="mr-2 flex items-center">
+                        <i class="fas fa-heart text-gray-800 mr-1"></i>
+                        <span class="text-gray-800">Wishlist</span>
+                    </a>
+                    <a href="{% url 'about_us' %}" class="mr-2 flex items-center">
+                        <i class="fas fa-info-circle text-gray-800 mr-1"></i>
+                        <span class="text-gray-800">About Us</span>
+                    </a>
+                    <a href="{% url 'logout' %}">
+                        <button class="bg-red-500 text-white px-4 py-2 rounded-md mr-2">Logout</button>
+                    </a>
+                {% else %}
+                    <a href="{% url 'login' %}">
+                        <button class="bg-blue-500 text-white px-4 py-2 rounded-md mr-2">Login</button>
+                    </a>
+                    <a href="{% url 'register' %}">
+                        <button class="bg-green-500 text-white px-4 py-2 rounded-md">Register</button>
+                    </a>
+                {% endif %}
+            </div>
+        </div>
+    </header>
+
+   
+    <main class="container mx-auto py-10 flex-grow">
+        
+        <section class="text-center mb-12">
+            <h1 class="text-4xl font-bold text-gray-800 mb-4">About Us</h1>
+            <p class="text-gray-600 mb-6">Learn more about eShop and our mission.</p>
+            <div id="map"></div> 
+        </section>
+    </main>
+
+   
+    <footer class="bg-gray-800 text-white py-4 mt-auto">
+        <div class="container mx-auto text-center">
+            <p>&copy; 2024 eShop. All rights reserved.</p>
+        </div>
+    </footer>
+
+    
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script>
+      
+        function initMap() {
+           
+            var mymap = L.map('map').setView([37.983810,23.727539], 13); 
+
+            
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                maxZoom: 18,
+            }).addTo(mymap);
+
+            
+            var marker = L.marker([37.983810, 23.727539]).addTo(mymap)
+                .bindPopup('eShop Headquarters'); // Tooltip text for the marker
+        }
+    </script>
+
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            initMap();
+        });
+    </script>
+</body>
+</html>

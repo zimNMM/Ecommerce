@@ -246,3 +246,6 @@ def remove_from_wishlist(request, product_id):
     wishlist_item = get_object_or_404(WishlistItem, wishlist=wishlist, product=product)
     wishlist_item.delete()
     return redirect('wishlist')
+
+def about_us(request):
+    return render(request, 'about_us.html')

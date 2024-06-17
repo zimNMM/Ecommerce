@@ -19,6 +19,7 @@ from django.urls import include,path
 from shop import views
 from django.conf import settings
 from django.conf.urls.static import static
+from shop.views import about_us
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.index, name='index'),
@@ -43,6 +44,7 @@ urlpatterns = [
     path('add-review/<str:product_id>/', views.add_review, name='add_review'),
     path('delete-review/<int:review_id>/', views.delete_review, name='delete_review'),
     path('payment/<str:order_id>/', views.payment, name='payment'),
+    path('about-us/', about_us, name='about_us'),
     ]
 
 if settings.DEBUG:
