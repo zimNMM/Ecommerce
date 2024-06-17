@@ -69,12 +69,12 @@ def accessories(request):
     products = Product.objects.filter(category=category)
     return render(request, 'shop/accessories.html', {'products': products, 'category_description': category_description})
 
-#product detail view with product_id as parameter to get the product object and display the product details or 404 page if product not found
+
 def product_detail(request, product_id):
     product = get_object_or_404(Product, product_id=product_id)
     return render(request, 'shop/product.html', {'product': product})
 
-#create the register view using shop/register.html template
+
 @redirect_authenticated_user
 def register(request):
     if request.method == 'POST':
@@ -248,4 +248,4 @@ def remove_from_wishlist(request, product_id):
     return redirect('wishlist')
 
 def about_us(request):
-    return render(request, 'about_us.html')
+    return render(request, 'shop/about_us.html')

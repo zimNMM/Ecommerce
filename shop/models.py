@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
-#category model with name and description fields
+
 class Category(models.Model):
     name = models.CharField(max_length=100)
     description = models.TextField(blank=True, null=True)
@@ -8,7 +8,7 @@ class Category(models.Model):
     def __str__(self):
         return self.name
     
-#product model with category as foreign key and image field for product image upload
+
 class Product(models.Model):
     category = models.ForeignKey(Category, related_name='products', on_delete=models.CASCADE)
     name = models.CharField(max_length=200)
@@ -54,7 +54,7 @@ class Cart(models.Model):
 
     def total_price(self):
         return sum(item.product.price * item.quantity for item in self.items.all())
-#cart item model with cart and product as foreign keys and quantity field
+
 class CartItem(models.Model):
     cart = models.ForeignKey(Cart, related_name='items', on_delete=models.CASCADE)
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
@@ -62,7 +62,7 @@ class CartItem(models.Model):
 
     def __str__(self):
         return f'{self.product.name} in cart of {self.cart.user.username}'
-#order model with user as foreign key and fullname, address, created_at, status, tracking_id and order_id fields
+
 class Order(models.Model):
     STATUS_CHOICES = (
         ('processing', 'Processing'),
