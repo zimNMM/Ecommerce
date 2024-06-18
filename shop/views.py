@@ -254,24 +254,30 @@ def remove_from_wishlist(request, product_id):
 def about_us(request):
     return render(request, 'shop/about_us.html')
 
-""""""""""
+"""""""""
 @redirect_authenticated_user
 def login_view(request):
     if request.method == 'POST':
-        username = request.POST.get('username')
-        password = request.POST.get('password')
-        user = authenticate(request, username=username, password=password)
-        
-        if user is not None:
-            login(request, user)
-            # Redirect to the index page after successful login
-            return redirect('index')
-        else:
-            messages.error(request, 'Invalid username or password.')
-    
-    return render(request, 'shop/login.html')
+        form = LoginForm(request.POST)
+        if form.is_valid():
+            username = form.cleaned_data['username']
+            password = form.cleaned_data['password']
+            user = authenticate(request, username=username, password=password)
+            if user is not None:
+                login(request, user)
+                # Check if 2FA is required
+                if user.has_usable_two_factor():
+                    return redirect('two_factor:login')
+                else:
+                    return redirect('profile')  # Redirect to profile if no 2FA
+            else:
+                messages.error(request, _('Invalid username or password.'))
+    else:
+        form = LoginForm()
+    return render(request, 'login.html', {'form': form})
 
-"""
+    """""
+
 @login_required_user
 def profile_view(request):
     return render(request, 'shop/profile.html', {'user': request.user})
