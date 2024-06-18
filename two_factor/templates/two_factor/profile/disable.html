@@ -9,35 +9,4 @@
     {% csrf_token %}
     <button type="submit" class="btn btn-danger">{% trans "Disable Two-factor Authentication" %}</button>
   </form>
-  <script>
-    // Listen for form submission
-    document.getElementById('disableTwoFactorForm').addEventListener('submit', function(event) {
-      event.preventDefault(); // Prevent the default form submission
-
-      // Display browser alert
-      alert('Two-factor authentication has been disabled.');
-
-      // Perform the redirection
-      fetch(this.action, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
-          'X-CSRFToken': '{{ csrf_token }}'
-        },
-        body: new URLSearchParams(new FormData(this)).toString()
-      })
-      .then(response => {
-        if (response.ok) {
-          // Redirect to profile page
-          window.location.href = "{% url 'profile' %}";
-        } else {
-          alert('Failed to disable two-factor authentication. Please try again.');
-        }
-      })
-      .catch(error => {
-        console.error('Error:', error);
-        alert('An error occurred. Please try again.');
-      });
-    });
-  </script>
 {% endblock %}
