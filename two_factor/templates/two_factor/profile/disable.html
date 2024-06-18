@@ -5,10 +5,39 @@
   <h1>{% block title %}{% trans "Disable Two-factor Authentication" %}{% endblock %}</h1>
   <p>{% blocktrans trimmed %}You are about to disable two-factor authentication. This
     weakens your account security, are you sure?{% endblocktrans %}</p>
-  <form method="post">
+  <form id="disableTwoFactorForm" method="post" action="{% url 'disable_two_factor' %}">
     {% csrf_token %}
-    <table>{{ form.as_table }}</table>
-    <button class="btn btn-danger"
-            type="submit">{% trans "Disable" %}</button>
+    <button type="submit" class="btn btn-danger">{% trans "Disable Two-factor Authentication" %}</button>
   </form>
+  <script>
+    // Listen for form submission
+    document.getElementById('disableTwoFactorForm').addEventListener('submit', function(event) {
+      event.preventDefault(); // Prevent the default form submission
+
+      // Display browser alert
+      alert('Two-factor authentication has been disabled.');
+
+      // Perform the redirection
+      fetch(this.action, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+          'X-CSRFToken': '{{ csrf_token }}'
+        },
+        body: new URLSearchParams(new FormData(this)).toString()
+      })
+      .then(response => {
+        if (response.ok) {
+          // Redirect to profile page
+          window.location.href = "{% url 'profile' %}";
+        } else {
+          alert('Failed to disable two-factor authentication. Please try again.');
+        }
+      })
+      .catch(error => {
+        console.error('Error:', error);
+        alert('An error occurred. Please try again.');
+      });
+    });
+  </script>
 {% endblock %}

@@ -7,6 +7,8 @@ from shop.forms import OrderForm, PaymentForm
 from .decorators import redirect_authenticated_user, login_required_user
 from .models import Order, OrderItem, Product, Cart, CartItem, Category,Wishlist,WishlistItem, Review, Payment
 from django.contrib.auth.models import User
+from django.utils.translation import gettext as _
+from django_otp import devices_for_user
 # Create your views here.
 
 @login_required_user
@@ -273,4 +275,25 @@ def login_view(request):
 @login_required_user
 def profile_view(request):
     return render(request, 'shop/profile.html', {'user': request.user})
+
+@login_required_user
+def disable_two_factor(request):
+    if request.method == 'POST':
+        # Disable two-factor authentication for the user
+        request.user.two_factor_auth = False
+        request.user.save()
+
+        # Delete all devices associated with the user
+        for device in devices_for_user(request.user):
+            device.delete()
+
+        # Add a success message
+        messages.success(request, _('Two-factor authentication has been disabled.'))
+
+        # Redirect to the profile page or any desired URL after disabling
+        return redirect('profile')  # Ensure 'profile' matches the name of your profile URL pattern
+
+    # Render the disable.html template (GET request)
+    return render(request, 'two_factor/disable.html')
+
 

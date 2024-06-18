@@ -42,6 +42,8 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include(tf_urls)),
     path('', views.index, name='index'),
+    path('disable_two_factor/', views.disable_two_factor, name='disable_two_factor'),
+    path('accounts/profile/', views.profile_view, name='profile'),
     path('mobilephone/', views.mobilephone, name='mobilephone'),
     path('laptop/', views.laptop, name='laptop'),
     path('tablet/', views.tablet, name='tablet'),
@@ -64,7 +66,7 @@ urlpatterns = [
     path('delete-review/<int:review_id>/', views.delete_review, name='delete_review'),
     path('payment/<str:order_id>/', views.payment, name='payment'),
     path('about-us/', about_us, name='about_us'),
-    path('profile/', views.profile_view, name='profile')
+    path('profile/', views.profile_view, name='profile'),
 ]
 
 if settings.DEBUG:
