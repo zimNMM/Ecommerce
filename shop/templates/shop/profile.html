@@ -3,12 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title>
+    <title>Profile</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body class="bg-gray-100 flex flex-col min-h-screen">
-
 
     <!-- Header -->
     <header class="bg-white shadow-md py-4">
@@ -20,10 +19,26 @@
                         <i class="fas fa-shopping-cart text-gray-800 mr-1"></i>
                         <span class="text-gray-800">Cart</span>
                     </a>
+                    <a href="{% url 'wishlist' %}" class="mr-2 flex items-center">
+                        <i class="fas fa-heart text-gray-800 mr-1"></i>
+                        <span class="text-gray-800">Wishlist</span>
+                    </a>
+                    <a href="{% url 'about_us' %}" class="mr-2 flex items-center">
+                        <i class="fas fa-info-circle text-gray-800 mr-1"></i>
+                        <span class="text-gray-800">About Us</span>
+                    </a>
+                    <a href="{% url 'profile' %}" class="mr-2 flex items-center">
+                        <i class="fas fa-cog text-gray-800 mr-1"></i>
+                        <span class="text-gray-800">Account Settings</span>
+                    </a>
                     <a href="{% url 'logout' %}">
                         <button class="bg-red-500 text-white px-4 py-2 rounded-md mr-2">Logout</button>
                     </a>
                 {% else %}
+                    <a href="{% url 'about_us' %}" class="mr-2 flex items-center">
+                        <i class="fas fa-info-circle text-gray-800 mr-1"></i>
+                        <span class="text-gray-800">About Us</span>
+                    </a>
                     <a href="{% url 'login' %}">
                         <button class="bg-blue-500 text-white px-4 py-2 rounded-md mr-2">Login</button>
                     </a>
@@ -36,19 +51,17 @@
     </header>
 
     <!-- Main Content -->
-    <main class="container mx-auto py-10">
-        <section class="max-w-md mx-auto bg-white shadow-md rounded-lg p-6">
-            <h2 class="text-3xl font-bold text-gray-800 mb-6 text-center">Login</h2>
-            <form method="post" class="space-y-4">
-                {% csrf_token %}
-                {{ form.as_p }}
-                <div class="flex justify-center">
-                    <button type="submit" class="bg-blue-500 text-white px-6 py-2 rounded-md">Login</button>
-                </div>
-            </form>
-            <p class="text-center text-gray-600 mt-6">Don't have an account? 
-                <a href="{% url 'register' %}" class="text-blue-500">Register here</a>
-            </p>
+    <main class="container mx-auto py-10 flex-grow">
+        <section class="max-w-2xl mx-auto bg-white shadow-md rounded-lg p-6 mt-6">
+            <h2 class="text-3xl font-bold text-gray-800 mb-6 text-center">Profile</h2>
+            <div class="space-y-4">
+                <p>Welcome, {{ user.username }}!</p>
+                <p>Email: {{ user.email }}</p>
+                <!-- Add more user details as needed -->
+            </div>
+            <div class="mt-6 flex justify-between">
+                <a href="{% url 'two_factor:profile' %}" class="bg-yellow-500 text-white px-4 py-2 rounded-md">Security</a>
+            </div>
         </section>
     </main>
 

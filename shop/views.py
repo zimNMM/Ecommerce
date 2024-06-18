@@ -6,6 +6,7 @@ from django.contrib import messages
 from shop.forms import OrderForm, PaymentForm
 from .decorators import redirect_authenticated_user, login_required_user
 from .models import Order, OrderItem, Product, Cart, CartItem, Category,Wishlist,WishlistItem, Review, Payment
+from django.contrib.auth.models import User
 # Create your views here.
 
 @login_required_user
@@ -101,6 +102,7 @@ def login(request):
     else:
         form = AuthenticationForm()
     return render(request, 'shop/login.html', {'form': form})
+    
 #create logout 
 @login_required_user
 def logout(request):
@@ -249,3 +251,26 @@ def remove_from_wishlist(request, product_id):
 
 def about_us(request):
     return render(request, 'shop/about_us.html')
+
+""""""""""
+@redirect_authenticated_user
+def login_view(request):
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        user = authenticate(request, username=username, password=password)
+        
+        if user is not None:
+            login(request, user)
+            # Redirect to the index page after successful login
+            return redirect('index')
+        else:
+            messages.error(request, 'Invalid username or password.')
+    
+    return render(request, 'shop/login.html')
+
+"""
+@login_required_user
+def profile_view(request):
+    return render(request, 'shop/profile.html', {'user': request.user})
+

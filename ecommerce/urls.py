@@ -14,21 +14,40 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+"""
+URL configuration for ecommerce project.
+
+The `urlpatterns` list routes URLs to views. For more information please see:
+    https://docs.djangoproject.com/en/5.0/topics/http/urls/
+Examples:
+Function views
+    1. Add an import:  from my_app import views
+    2. Add a URL to urlpatterns:  path('', views.home, name='home')
+Class-based views
+    1. Add an import:  from other_app.views import Home
+    2. Add a URL to urlpatterns:  path('', Home.as_view(), name='home')
+Including another URLconf
+    1. Import the include() function: from django.urls import include, path
+    2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
+"""
 from django.contrib import admin
 from django.urls import include,path
 from shop import views
 from django.conf import settings
 from django.conf.urls.static import static
 from shop.views import about_us
+from two_factor.urls import urlpatterns as tf_urls
+
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('', include(tf_urls)),
     path('', views.index, name='index'),
     path('mobilephone/', views.mobilephone, name='mobilephone'),
     path('laptop/', views.laptop, name='laptop'),
     path('tablet/', views.tablet, name='tablet'),
     path('accessories/', views.accessories, name='accessories'),
     path('register/', views.register, name='register'),
-    path('login/', views.login, name='login'),
+    path('login/', views.login, name='login'),  # Ensure login_view handles redirection
     path('logout/', views.logout, name='logout'),
     path('product/<str:product_id>/', views.product_detail, name='product_detail'),
     path('add-to-cart/<str:product_id>/', views.add_to_cart, name='add_to_cart'),
@@ -45,7 +64,8 @@ urlpatterns = [
     path('delete-review/<int:review_id>/', views.delete_review, name='delete_review'),
     path('payment/<str:order_id>/', views.payment, name='payment'),
     path('about-us/', about_us, name='about_us'),
-    ]
+    path('profile/', views.profile_view, name='profile')
+]
 
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
