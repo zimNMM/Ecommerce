@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}eShop{% endblock %}</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet" media="screen">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <script defer src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script defer src="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    {% block extra_media %}{% endblock %}
+</head>
+<body class="bg-gray-100 flex flex-col min-h-screen">
+
+    <!-- Header -->
+    <header class="bg-white shadow-md py-4">
+        <div class="container mx-auto flex justify-between items-center">
+            <div class="text-2xl font-bold text-gray-800">
+                <a href="{% url 'index' %}">eShop</a>
+            </div>
+            <nav>
+                <ul class="flex space-x-4">
+                    <li><a href="{% url 'about_us' %}" class="text-gray-800 hover:text-gray-600">About Us</a></li>
+                    {% if user.is_authenticated %}
+                        <li><a href="{% url 'cart' %}" class="text-gray-800 hover:text-gray-600 flex items-center">
+                            <i class="fas fa-shopping-cart mr-1"></i>Cart</a>
+                        </li>
+                        <li><a href="{% url 'wishlist' %}" class="text-gray-800 hover:text-gray-600 flex items-center">
+                            <i class="fas fa-heart mr-1"></i>Wishlist</a>
+                        </li>
+                        <li><a href="{% url 'profile' %}" class="text-gray-800 hover:text-gray-600 flex items-center">
+                            <i class="fas fa-cog mr-1"></i>Account Settings</a>
+                        </li>
+                        <li><a href="{% url 'logout' %}">
+                            <button class="bg-red-500 text-white px-4 py-2 rounded-md">Logout</button>
+                        </a></li>
+                    {% else %}
+                        <li><a href="{% url 'login' %}">
+                            <button class="bg-blue-500 text-white px-4 py-2 rounded-md">Login</button>
+                        </a></li>
+                        <li><a href="{% url 'register' %}">
+                            <button class="bg-green-500 text-white px-4 py-2 rounded-md">Register</button>
+                        </a></li>
+                    {% endif %}
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container mx-auto py-10 flex-grow">
+        {% block content_wrapper %}
+            <div class="container">
+                {% block content %}{% endblock %}
+            </div>
+        {% endblock %}
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-4 mt-auto">
+        <div class="container mx-auto text-center">
+            <p>&copy; 2024 eShop. All rights reserved.</p>
+        </div>
+    </footer>
+
+</body>
+</html>
