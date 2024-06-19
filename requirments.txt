@@ -1,14 +1,14 @@
 Django==5.0.6
 django-jazzmin==3.0.0
 pillow==10.3.0
-django-formtools-2.5.1 
-django-phonenumber-field-7.3.0 
-django-two-factor-auth-1.16.0
-phonenumbers-8.13.39
-phonenumberslite-8.13.39
-babel-2.15.0 
-i18n-0.2 
-py-1.11.0
-l10n-0.1.5
-tz-0.2.2
+django-formtools==2.5.1 
+django-phonenumber-field==7.3.0 
+django-two-factor-auth==1.16.0
+phonenumbers==8.13.39
+phonenumberslite==8.13.39
+babel==2.15.0 
+i18n==0.2 
+py==1.11.0
+l10n==0.1.5
+tz==0.2.2
 
