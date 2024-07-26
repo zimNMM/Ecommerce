@@ -8,9 +8,9 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
 </head>
-<body class="flex flex-col min-h-screen bg-gray-50 font-sans scroll-smooth" x-data="{ mobileMenu: false }">
+<body class="flex flex-col min-h-screen bg-gray-50 font-sans scroll-smooth" x-data="{ mobileMenu: false, showBaseMessages: true }">
     {% if messages %}
-    <div class="messages container mx-auto px-4 py-4" x-data="{ showMessages: true }">
+    <div class="messages container mx-auto px-4 py-4" x-data="{ showMessages: true }" x-show="showBaseMessages">
         {% for message in messages %}
         <div x-show="showMessages" class="alert {{ message.tags }} bg-white border-l-4 p-4 mb-4 shadow-md rounded-r animate-fade-in-down relative" role="alert">
             <p class="text-sm pr-8">{{ message }}</p>
@@ -154,6 +154,13 @@
         });
         backToTopButton.addEventListener('click', () => {
             window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+
+        document.addEventListener('DOMContentLoaded', function() {
+            // Check if the current page is the cart page
+            if (window.location.pathname === '{% url "cart" %}') {
+                document.querySelector('.messages').style.display = 'none';
+            }
         });
     </script>
 </body>
