@@ -1,94 +1,58 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Wishlist - eShop</title>
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <style>
-        .product-image {
-            width: 100%;
-            height: 300px;
-            object-fit: contain;
-            transition: transform 0.3s ease-in-out;
-        }
-        .product-card:hover .product-image {
-            transform: scale(1.05);
-        }
-    </style>
-</head>
-<body class="bg-gray-100 flex flex-col min-h-screen">
+{% extends 'shop/base.html' %}
+{% block title %}Wishlist - eShop{% endblock %}
 
-    <!-- Header -->
-    <header class="bg-white shadow-md py-4">
-        <div class="container mx-auto flex justify-between items-center">
-            <div class="text-2xl font-bold text-gray-800"><a href="{% url 'index' %}">eShop</a></div>
-            <div>
-                <!-- Add other links as needed -->
-            </div>
-            <div class="flex items-center">
-                {% if user.is_authenticated %}
-                    <a href="{% url 'cart' %}" class="mr-2 flex items-center">
-                        <i class="fas fa-shopping-cart text-gray-800 mr-1"></i>
-                        <span class="text-gray-800">Cart</span>
-                    </a>
-                    <a href="{% url 'wishlist' %}" class="mr-2 flex items-center">
-                        <i class="fas fa-heart text-gray-800 mr-1"></i>
-                        <span class="text-gray-800">Wishlist</span>
-                    </a>
-                    <a href="{% url 'about_us' %}" class="mr-2 flex items-center">
-                        <i class="fas fa-info-circle text-gray-800 mr-1"></i>
-                        <span class="text-gray-800">About Us</span>
-                    </a>
-                    <a href="{% url 'logout' %}">
-                        <button class="bg-red-500 text-white px-4 py-2 rounded-md mr-2">Logout</button>
-                    </a>
-                {% else %}
-                    <a href="{% url 'login' %}">
-                        <button class="bg-blue-500 text-white px-4 py-2 rounded-md mr-2">Login</button>
-                    </a>
-                    <a href="{% url 'register' %}">
-                        <button class="bg-green-500 text-white px-4 py-2 rounded-md">Register</button>
-                    </a>
-                {% endif %}
-            </div>
-        </div>
-    </header>
-    <!-- Main Content -->
-    <main class="container mx-auto py-10">
-        <section class="text-center mb-12">
-            <h1 class="text-4xl font-bold text-gray-800 mb-4">Wishlist</h1>
-            {% if wishlist_items %}
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {% for product in wishlist_items %}
-                    <div class="bg-white shadow-md rounded-lg overflow-hidden product-card flex flex-col">
-                        <a href="{% url 'product_detail' product.product_id %}">
-                            <img src="{{ product.image.url }}" alt="{{ product.name }}" class="product-image">
-                        </a>
-                        <div class="p-4 flex flex-col flex-grow">
-                            <h2 class="text-xl font-bold text-gray-800">{{ product.name }}</h2>
-                            <p class="text-gray-600 flex-grow">{{ product.description }}</p>
-                            <p class="text-gray-800 font-bold">{{ product.price }}€</p>
-                            <div class="mt-2">
-                                <a href="{% url 'remove_from_wishlist' product.product_id %}" class="bg-red-500 text-white px-4 py-2 rounded-md inline-block">Remove from Wishlist</a>
-                            </div>
-                        </div>
+{% block content %}
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section class="text-center mb-16 animate-fade-in-down">
+        <h1 class="text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-indigo-600 mb-8">Your Wishlist</h1>
+        
+        {% if wishlist_items %}
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {% for product in wishlist_items %}
+            <div class="bg-white shadow-lg rounded-lg overflow-hidden flex flex-col transition duration-300 ease-in-out transform hover:shadow-xl">
+                <a href="{% url 'product_detail' product.product_id %}" class="relative w-full h-64 bg-gray-200 overflow-hidden">
+                    <img src="{{ product.image.url }}" alt="{{ product.name }}" class="w-full h-full object-contain transition duration-300 ease-in-out transform hover:scale-105">
+                </a>
+                <div class="p-6 flex-grow flex flex-col justify-between">
+                    <div>
+                        <h2 class="text-xl font-semibold text-gray-900 mb-2">
+                            <a href="{% url 'product_detail' product.product_id %}" class="hover:text-indigo-600 transition duration-300">
+                                {{ product.name }}
+                            </a>
+                        </h2>
+                        <p class="text-gray-600 mb-4">{{ product.description|truncatechars:100 }}</p>
+                        <p class="text-2xl font-bold text-indigo-600 mb-4">{{ product.price }}€</p>
                     </div>
-                {% endfor %}
+                    <div class="mt-auto">
+                        <a href="{% url 'remove_from_wishlist' product.product_id %}" class="block w-full bg-gradient-to-r from-red-400 to-red-600 hover:from-red-500 hover:to-red-700 text-white font-bold px-4 py-2 rounded-full transition duration-300 ease-in-out transform hover:scale-105 text-center">
+                            <i class="fas fa-trash-alt mr-2"></i> Remove from Wishlist
+                        </a>
+                    </div>
+                </div>
             </div>
-            {% else %}
-                <p class="text-xl text-gray-800">Your wishlist is empty.</p>
-            {% endif %}
-        </section>
-    </main>
-
-    <!-- Footer -->
-    <footer class="bg-gray-800 text-white py-4 mt-auto">
-        <div class="container mx-auto text-center">
-            <p>&copy; 2024 eShop. All rights reserved.</p>
+            {% endfor %}
         </div>
-    </footer>
+        {% else %}
+        <div class="bg-white shadow-lg rounded-lg p-8 animate-fade-in-up">
+            <p class="text-2xl text-gray-600 mb-6">Your wishlist is empty.</p>
+            <a href="{% url 'index' %}" class="bg-gradient-to-r from-purple-500 to-indigo-600 text-white font-bold px-6 py-3 rounded-full transition duration-300 ease-in-out transform hover:scale-105 inline-block">
+                <i class="fas fa-shopping-bag mr-2"></i> Start Shopping
+            </a>
+        </div>
+        {% endif %}
+    </section>
+</div>
 
-</body>
-</html>
+<style>
+    @keyframes fadeInDown {
+        from { opacity: 0; transform: translateY(-20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeInUp {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+    .animate-fade-in-down { animation: fadeInDown 1s ease-out; }
+    .animate-fade-in-up { animation: fadeInUp 1s ease-out; }
+</style>
+{% endblock %}

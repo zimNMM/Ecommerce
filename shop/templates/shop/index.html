@@ -1,116 +1,68 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>eShop Landing Page</title>
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-</head>
-<body class="bg-gray-100 flex flex-col min-h-screen">
+{% extends 'shop/base.html' %}
 
-    <!-- Header -->
-    <header class="bg-white shadow-md py-4">
-        <div class="container mx-auto flex justify-between items-center">
-            <div class="text-2xl font-bold text-gray-800"><a href="{% url 'index' %}">eShop</a></div>
-            <div>
-                <!-- Add other links as needed -->
-            </div>
-            <div class="flex items-center">
-                {% if user.is_authenticated %}
-                    <a href="{% url 'cart' %}" class="mr-2 flex items-center">
-                        <i class="fas fa-shopping-cart text-gray-800 mr-1"></i>
-                        <span class="text-gray-800">Cart</span>
-                    </a>
-                    <a href="{% url 'wishlist' %}" class="mr-2 flex items-center">
-                        <i class="fas fa-heart text-gray-800 mr-1"></i>
-                        <span class="text-gray-800">Wishlist</span>
-                    </a>
-                    <a href="{% url 'about_us' %}" class="mr-2 flex items-center">
-                        <i class="fas fa-info-circle text-gray-800 mr-1"></i>
-                        <span class="text-gray-800">About Us</span>
-                    </a>
-                    <a href="{% url 'logout' %}">
-                        <button class="bg-red-500 text-white px-4 py-2 rounded-md mr-2">Logout</button>
-                    </a>
-                {% else %}
-                    <a href="{% url 'about_us' %}" class="mr-2 flex items-center">
-                    <i class="fas fa-info-circle text-gray-800 mr-1"></i>
-                    <span class="text-gray-800">About Us</span>
-                    </a>
-                    <a href="{% url 'login' %}">
-                        <button class="bg-blue-500 text-white px-4 py-2 rounded-md mr-2">Login</button>
-                    </a>
-                    <a href="{% url 'register' %}">
-                        <button class="bg-green-500 text-white px-4 py-2 rounded-md">Register</button>
-                    </a>
-                {% endif %}
+{% block title %}
+    Welcome to eShop
+{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="text-center mb-20">
+    <h1 class="text-6xl font-bold mb-6 text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-indigo-600 animate-fade-in-down">Welcome to eShop</h1>
+    <p class="text-2xl text-gray-600 mb-10 animate-fade-in-up">Unleash the Future: Cutting-Edge Tech at Your Fingertips</p>
+    {% if user.is_authenticated %}
+        <a href="{% url 'my_orders' %}" class="bg-gradient-to-r from-purple-500 to-indigo-500 text-white px-10 py-4 rounded-full text-lg hover:from-purple-600 hover:to-indigo-600 transition transform hover:scale-105 inline-block">My Orders</a>
+    {% else %}
+        <a href="{% url 'register' %}" class="bg-gradient-to-r from-purple-500 to-indigo-500 text-white px-10 py-4 rounded-full text-lg hover:from-purple-600 hover:to-indigo-600 transition transform hover:scale-105 inline-block">Explore Now</a>
+    {% endif %}
+</section>
+
+<!-- Categories Section -->
+<section id="categories" class="mb-20">
+    <h2 class="text-4xl font-bold mb-12 text-center text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-indigo-600">Discover Our Tech Universe</h2>
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10">
+        <!-- Category Card - Laptops -->
+        <div class="bg-white rounded-2xl shadow-xl overflow-hidden transform hover:scale-105 transition duration-300 group">
+            <div class="p-8 flex flex-col items-center">
+                <div class="w-24 h-24 bg-blue-100 rounded-full flex items-center justify-center mb-6 group-hover:bg-blue-200 transition-colors duration-300">
+                    <i class="fas fa-laptop text-blue-600 text-4xl group-hover:scale-110 transition-transform duration-300"></i>
+                </div>
+                <h3 class="text-2xl font-semibold text-gray-800 mb-4">Laptops</h3>
+                <a href="{% url 'laptop' %}" class="mt-4 bg-blue-600 text-white px-6 py-2 rounded-full hover:bg-blue-700 transition">Shop Now</a>
             </div>
         </div>
-    </header>
-
-    <!-- Main Content -->
-    <main class="container mx-auto py-10 flex-grow">
-        <!-- Hero Section -->
-        <section class="text-center mb-12">
-            <h1 class="text-4xl font-bold text-gray-800 mb-4">Welcome to eShop</h1>
-            <p class="text-gray-600 mb-6">Find the best products at unbeatable prices</p>
-            {% if user.is_authenticated %}
-                <a href="{% url 'my_orders' %}" class="bg-blue-500 text-white px-6 py-3 rounded-md">My Orders</a>
-            {% else %}
-                <a href="{% url 'register' %}" class="bg-blue-500 text-white px-6 py-3 rounded-md">Shop Now</a>
-            {% endif %}
-        </section>
-        <!-- Categories Section -->
-        <section id="categories">
-            <h2 class="text-3xl font-bold text-gray-800 mb-8 text-center">Categories</h2>
-            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
-                <!-- Category Card - Laptops -->
-                <div class="bg-white shadow-md rounded-lg overflow-hidden flex flex-col items-center">
-                    <div class="p-6">
-                        <div class="flex items-center justify-center h-16 w-16 bg-blue-100 rounded-full mb-4 mx-auto">
-                            <i class="fas fa-laptop text-blue-500 text-2xl"></i>
-                        </div>
-                        <a href="{% url 'laptop' %}" class="bg-blue-500 text-white px-6 py-3 rounded-md">Laptops</a>
-                    </div>
+        
+        <!-- Category Card - Mobile Phones -->
+        <div class="bg-white rounded-2xl shadow-xl overflow-hidden transform hover:scale-105 transition duration-300 group">
+            <div class="p-8 flex flex-col items-center">
+                <div class="w-24 h-24 bg-green-100 rounded-full flex items-center justify-center mb-6 group-hover:bg-green-200 transition-colors duration-300">
+                    <i class="fas fa-mobile-alt text-green-600 text-4xl group-hover:scale-110 transition-transform duration-300"></i>
                 </div>
-                <!-- Category Card - Mobile Phones -->
-                <div class="bg-white shadow-md rounded-lg overflow-hidden flex flex-col items-center">
-                    <div class="p-6">
-                        <div class="flex items-center justify-center h-16 w-16 bg-green-100 rounded-full mb-4 mx-auto">
-                            <i class="fas fa-mobile-alt text-green-500 text-2xl"></i>
-                        </div>
-                        <a href="{% url 'mobilephone' %}" class="bg-green-500 text-white px-6 py-3 rounded-md">Mobile Phones</a>
-                    </div>
-                </div>
-                <!-- Category Card - Tablets -->
-                <div class="bg-white shadow-md rounded-lg overflow-hidden flex flex-col items-center">
-                    <div class="p-6">
-                        <div class="flex items-center justify-center h-16 w-16 bg-purple-100 rounded-full mb-4 mx-auto">
-                            <i class="fas fa-tablet-alt text-purple-500 text-2xl"></i>
-                        </div>
-                        <a href="{% url 'tablet' %}" class="bg-purple-500 text-white px-6 py-3 rounded-md">Tablets</a>
-                    </div>
-                </div>
-                <!-- Category Card - Accessories -->
-                <div class="bg-white shadow-md rounded-lg overflow-hidden flex flex-col items-center">
-                    <div class="p-6">
-                        <div class="flex items-center justify-center h-16 w-16 bg-red-100 rounded-full mb-4 mx-auto">
-                            <i class="fas fa-headphones-alt text-red-500 text-2xl"></i>
-                        </div>
-                        <a href="{% url 'accessories' %}" class="bg-red-500 text-white px-6 py-3 rounded-md">Accessories</a>
-                    </div>
-                </div>
+                <h3 class="text-2xl font-semibold text-gray-800 mb-4">Mobile Phones</h3>
+                <a href="{% url 'mobilephone' %}" class="mt-4 bg-green-600 text-white px-6 py-2 rounded-full hover:bg-green-700 transition">Shop Now</a>
             </div>
-        </section>
-    </main>
-
-    <!-- Footer -->
-    <footer class="bg-gray-800 text-white py-4 mt-auto">
-        <div class="container mx-auto text-center">
-            <p>&copy; 2024 eShop. All rights reserved.</p>
         </div>
-    </footer>
-
-</body>
-</html>
+        
+        <!-- Category Card - Tablets -->
+        <div class="bg-white rounded-2xl shadow-xl overflow-hidden transform hover:scale-105 transition duration-300 group">
+            <div class="p-8 flex flex-col items-center">
+                <div class="w-24 h-24 bg-purple-100 rounded-full flex items-center justify-center mb-6 group-hover:bg-purple-200 transition-colors duration-300">
+                    <i class="fas fa-tablet-alt text-purple-600 text-4xl group-hover:scale-110 transition-transform duration-300"></i>
+                </div>
+                <h3 class="text-2xl font-semibold text-gray-800 mb-4">Tablets</h3>
+                <a href="{% url 'tablet' %}" class="mt-4 bg-purple-600 text-white px-6 py-2 rounded-full hover:bg-purple-700 transition">Shop Now</a>
+            </div>
+        </div>
+        
+        <!-- Category Card - Accessories -->
+        <div class="bg-white rounded-2xl shadow-xl overflow-hidden transform hover:scale-105 transition duration-300 group">
+            <div class="p-8 flex flex-col items-center">
+                <div class="w-24 h-24 bg-red-100 rounded-full flex items-center justify-center mb-6 group-hover:bg-red-200 transition-colors duration-300">
+                    <i class="fas fa-headphones-alt text-red-600 text-4xl group-hover:scale-110 transition-transform duration-300"></i>
+                </div>
+                <h3 class="text-2xl font-semibold text-gray-800 mb-4">Accessories</h3>
+                <a href="{% url 'accessories' %}" class="mt-4 bg-red-600 text-white px-6 py-2 rounded-full hover:bg-red-700 transition">Shop Now</a>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

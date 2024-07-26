@@ -1,70 +1,75 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Payment - eShop</title>
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-</head>
-<body class="bg-gray-100 flex flex-col min-h-screen">
+{% extends 'shop/base.html' %}
 
-    <!-- Header -->
-    <header class="bg-white shadow-md py-4">
-        <div class="container mx-auto flex justify-between items-center">
-            <div class="text-2xl font-bold text-gray-800"><a href="{% url 'index' %}">eShop</a></div>
-            <div>
-                <!-- Add other links as needed -->
-            </div>
-            <div class="flex items-center">
-                {% if user.is_authenticated %}
-                    <a href="{% url 'cart' %}" class="mr-2 flex items-center">
-                        <i class="fas fa-shopping-cart text-gray-800 mr-1"></i>
-                        <span class="text-gray-800">Cart</span>
-                    </a>
-                    <a href="{% url 'wishlist' %}" class="mr-2 flex items-center">
-                        <i class="fas fa-heart text-gray-800 mr-1"></i>
-                        <span class="text-gray-800">Wishlist</span>
-                    </a>
-                    <a href="{% url 'about_us' %}" class="mr-2 flex items-center">
-                        <i class="fas fa-info-circle text-gray-800 mr-1"></i>
-                        <span class="text-gray-800">About Us</span>
-                    </a>
-                    <a href="{% url 'logout' %}">
-                        <button class="bg-red-500 text-white px-4 py-2 rounded-md mr-2">Logout</button>
-                    </a>
-                {% else %}
-                    <a href="{% url 'login' %}">
-                        <button class="bg-blue-500 text-white px-4 py-2 rounded-md mr-2">Login</button>
-                    </a>
-                    <a href="{% url 'register' %}">
-                        <button class="bg-green-500 text-white px-4 py-2 rounded-md">Register</button>
-                    </a>
-                {% endif %}
-            </div>
-        </div>
-    </header>
+{% block title %}Payment - eShop{% endblock %}
 
-    <!-- Main Content -->
-    <main class="container mx-auto py-10">
-        <section class="text-center mb-12">
-            <h1 class="text-4xl font-bold text-gray-800 mb-4">Payment</h1>
-            <form method="post">
+{% block content %}
+<div class="max-w-md mx-auto px-4 sm:px-6 lg:px-8">
+    <section class="mb-16 animate-fade-in-down">
+        <h1 class="text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-indigo-600 mb-8 text-center">Secure Payment</h1>
+        
+        <div class="bg-white shadow-lg rounded-lg p-8">
+            <div class="flex justify-center mb-6">
+                <i class="fas fa-lock text-4xl text-green-500"></i>
+            </div>
+            <form method="post" class="space-y-6">
                 {% csrf_token %}
-                {{ form.as_p }}
-                <div class="mt-6">
-                    <button type="submit" class="bg-blue-500 text-white px-6 py-3 rounded-md">Submit Payment</button>
+                <div class="relative">
+                    <label for="id_card_number" class="block text-sm font-medium text-gray-700 mb-1">Card Number</label>
+                    <input type="text" name="card_number" id="id_card_number" value="{{ form.card_number.value|default:'' }}" class="block w-full pr-10 rounded-md border-gray-300 shadow-sm focus:ring-indigo-500 focus:border-indigo-500" placeholder="1234 5678 9012 3456">
+                    <div class="absolute inset-y-0 right-0 flex items-center pr-3 pt-6">
+                        <i class="fas fa-credit-card text-gray-400"></i>
+                    </div>
+                    {% if form.card_number.errors %}
+                        <p class="mt-2 text-sm text-red-600">{{ form.card_number.errors }}</p>
+                    {% endif %}
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label for="id_card_expiry_date" class="block text-sm font-medium text-gray-700 mb-1">Expiry Date</label>
+                        <input type="text" name="card_expiry_date" id="id_card_expiry_date" value="{{ form.card_expiry_date.value|default:'' }}" class="block w-full rounded-md border-gray-300 shadow-sm focus:ring-indigo-500 focus:border-indigo-500" placeholder="MM/YY">
+                        {% if form.card_expiry_date.errors %}
+                            <p class="mt-2 text-sm text-red-600">{{ form.card_expiry_date.errors }}</p>
+                        {% endif %}
+                    </div>
+                    <div>
+                        <label for="id_card_cvc" class="block text-sm font-medium text-gray-700 mb-1">CVC</label>
+                        <input type="text" name="card_cvc" id="id_card_cvc" value="{{ form.card_cvc.value|default:'' }}" class="block w-full rounded-md border-gray-300 shadow-sm focus:ring-indigo-500 focus:border-indigo-500" placeholder="123">
+                        {% if form.card_cvc.errors %}
+                            <p class="mt-2 text-sm text-red-600">{{ form.card_cvc.errors }}</p>
+                        {% endif %}
+                    </div>
+                </div>
+                <div>
+                    <label for="id_card_name" class="block text-sm font-medium text-gray-700 mb-1">Card Holder Name</label>
+                    <input type="text" name="card_name" id="id_card_name" value="{{ form.card_name.value|default:'' }}" class="block w-full rounded-md border-gray-300 shadow-sm focus:ring-indigo-500 focus:border-indigo-500" placeholder="John Doe">
+                    {% if form.card_name.errors %}
+                        <p class="mt-2 text-sm text-red-600">{{ form.card_name.errors }}</p>
+                    {% endif %}
+                </div>
+                <div class="mt-8">
+                    <button type="submit" class="w-full flex justify-center py-3 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                        <i class="fas fa-lock mr-2"></i> Pay Securely
+                    </button>
                 </div>
             </form>
-        </section>
-    </main>
-
-    <!-- Footer -->
-    <footer class="bg-gray-800 text-white py-4 mt-auto">
-        <div class="container mx-auto text-center">
-            <p>&copy; 2024 eShop. All rights reserved.</p>
+            <div class="mt-6 flex items-center justify-center space-x-4">
+                <i class="fab fa-cc-visa text-2xl text-blue-600"></i>
+                <i class="fab fa-cc-mastercard text-2xl text-red-500"></i>
+                <i class="fab fa-cc-amex text-2xl text-blue-400"></i>
+                <i class="fab fa-cc-discover text-2xl text-orange-500"></i>
+            </div>
+            <p class="mt-4 text-xs text-center text-gray-500">
+                <i class="fas fa-shield-alt mr-1"></i> Your payment information is encrypted and secure.
+            </p>
         </div>
-    </footer>
+    </section>
+</div>
 
-</body>
-</html>
+<style>
+    @keyframes fadeInDown {
+        from { opacity: 0; transform: translateY(-20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+    .animate-fade-in-down { animation: fadeInDown 1s ease-out; }
+</style>
+{% endblock %}

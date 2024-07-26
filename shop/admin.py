@@ -1,6 +1,6 @@
 import random
 from django.contrib import admin
-from shop.models import Category, Product, Cart, CartItem, Order, OrderItem, Wishlist, WishlistItem, Review, Payment
+from shop.models import Category, Product, Cart, CartItem, Order, OrderItem, Wishlist, WishlistItem, Review, Payment,Contact
 
 class PaymentAdmin(admin.ModelAdmin):
     list_display = ('order', 'method', 'card_number', 'card_expiry_date', 'card_cvc')
@@ -88,6 +88,11 @@ class ReviewAdmin(admin.ModelAdmin):
     list_filter = ('created_at',)
     search_fields = ('user__username', 'product__name')
 
+class ContactAdmin(admin.ModelAdmin):
+    list_display = ('name', 'email', 'created_at')
+    search_fields = ('name', 'email')
+
+admin.site.register(Contact, ContactAdmin)
 admin.site.register(Category, CategoryAdmin)
 admin.site.register(Product, ProductAdmin)
 admin.site.register(Cart, CartAdmin)

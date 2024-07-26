@@ -1,108 +1,100 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Checkout - eShop</title>
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-</head>
-<body class="bg-gray-100 flex flex-col min-h-screen">
+{% extends 'shop/base.html' %}
+{% block title %}Checkout - eShop{% endblock %}
 
-    <!-- Header -->
-    <header class="bg-white shadow-md py-4">
-        <div class="container mx-auto flex justify-between items-center">
-            <div class="text-2xl font-bold text-gray-800"><a href="{% url 'index' %}">eShop</a></div>
-            <div>
-                <!-- Add other links as needed -->
-            </div>
-            <div class="flex items-center">
-                {% if user.is_authenticated %}
-                    <a href="{% url 'cart' %}" class="mr-2 flex items-center">
-                        <i class="fas fa-shopping-cart text-gray-800 mr-1"></i>
-                        <span class="text-gray-800">Cart</span>
-                    </a>
-                    <a href="{% url 'wishlist' %}" class="mr-2 flex items-center">
-                        <i class="fas fa-heart text-gray-800 mr-1"></i>
-                        <span class="text-gray-800">Wishlist</span>
-                    </a>
-                    <a href="{% url 'about_us' %}" class="mr-2 flex items-center">
-                        <i class="fas fa-info-circle text-gray-800 mr-1"></i>
-                        <span class="text-gray-800">About Us</span>
-                    </a>
-                    <a href="{% url 'logout' %}">
-                        <button class="bg-red-500 text-white px-4 py-2 rounded-md mr-2">Logout</button>
-                    </a>
-                {% else %}
-                    <a href="{% url 'login' %}">
-                        <button class="bg-blue-500 text-white px-4 py-2 rounded-md mr-2">Login</button>
-                    </a>
-                    <a href="{% url 'register' %}">
-                        <button class="bg-green-500 text-white px-4 py-2 rounded-md">Register</button>
-                    </a>
-                {% endif %}
-            </div>
-        </div>
-    </header>
-
-    <!-- Main Content -->
-    <main class="container mx-auto py-10">
-        <section class="text-center mb-12">
-            <h1 class="text-4xl font-bold text-gray-800 mb-4">Checkout</h1>
-            <form method="post">
+{% block content %}
+<div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section class="mb-16 animate-fade-in-down">
+        <h1 class="text-4xl md:text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-indigo-600 mb-8 text-center">Checkout</h1>
+        
+        <div class="bg-white shadow-lg rounded-lg p-8">
+            <form method="post" class="space-y-6">
                 {% csrf_token %}
-                {{ form.as_p }}
-                <h2 class="text-2xl font-bold text-gray-800 mb-4">Order Summary</h2>
-                <table class="min-w-full bg-white">
-                    <thead>
-                        <tr>
-                            <th class="py-2">Product</th>
-                            <th class="py-2">Quantity</th>
-                            <th class="py-2">Price</th>
-                            <th class="py-2">Total</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for item in cart_items %}
-                            <tr>
-                                <td class="py-2">{{ item.product.name }}</td>
-                                <td class="py-2">{{ item.quantity }}</td>
-                                <td class="py-2">{{ item.product.price }}€</td>
-                                <td class="py-2">{{ item.total_price|floatformat:2 }}€</td>
-                            </tr>
-                        {% endfor %}
-                        <tr>
-                            <td colspan="3" class="py-2 font-bold text-right">Total</td>
-                            <td class="py-2 font-bold">{{ total_price|floatformat:2 }}€</td>
-                        </tr>
-                    </tbody>
-                </table>
-
-                <div class="mt-6">
-                    <h2 class="text-2xl font-bold text-gray-800 mb-4">Payment Method</h2>
-                    <label class="inline-flex items-center">
-                        <input type="radio" name="payment_method" value="cod" class="form-radio" checked>
-                        <span class="ml-2">Cash on Delivery</span>
-                    </label>
-                    <label class="inline-flex items-center ml-4">
-                        <input type="radio" name="payment_method" value="card" class="form-radio">
-                        <span class="ml-2">Credit Card</span>
-                    </label>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="relative">
+                        <label for="id_fullname" class="block text-sm font-medium text-gray-700 mb-1">Full Name</label>
+                        <div class="mt-1 relative rounded-md shadow-sm">
+                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                <i class="fas fa-user text-gray-400"></i>
+                            </div>
+                            <input type="text" name="fullname" id="id_fullname" value="{{ form.fullname.value|default:'' }}" class="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md leading-5 bg-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:border-indigo-600 sm:text-sm">
+                        </div>
+                        {% if form.fullname.errors %}
+                        <p class="mt-2 text-sm text-red-600">{{ form.fullname.errors }}</p>
+                        {% endif %}
+                    </div>
+                    <div class="relative">
+                        <label for="id_address" class="block text-sm font-medium text-gray-700 mb-1">Address</label>
+                        <div class="mt-1 relative rounded-md shadow-sm">
+                            <div class="absolute inset-y-0 left-0 pl-3 pt-2 pointer-events-none">
+                                <i class="fas fa-home text-gray-400"></i>
+                            </div>
+                            <textarea name="address" id="id_address" rows="3" class="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md leading-5 bg-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:border-indigo-600 sm:text-sm">{{ form.address.value|default:'' }}</textarea>
+                        </div>
+                        {% if form.address.errors %}
+                        <p class="mt-2 text-sm text-red-600">{{ form.address.errors }}</p>
+                        {% endif %}
+                    </div>
                 </div>
 
-                <div class="mt-6">
-                    <button type="submit" class="bg-blue-500 text-white px-6 py-3 rounded-md">Place Order</button>
+                <div class="mt-8">
+                    <h2 class="text-2xl font-bold text-gray-800 mb-4">Order Summary</h2>
+                    <div class="overflow-x-auto bg-gray-50 rounded-lg shadow">
+                        <table class="min-w-full divide-y divide-gray-200">
+                            <thead class="bg-gray-100">
+                                <tr>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Product</th>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Quantity</th>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Price</th>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Total</th>
+                                </tr>
+                            </thead>
+                            <tbody class="bg-white divide-y divide-gray-200">
+                                {% for item in cart_items %}
+                                <tr>
+                                    <td class="px-6 py-4 whitespace-nowrap">{{ item.product.name }}</td>
+                                    <td class="px-6 py-4 whitespace-nowrap">{{ item.quantity }}</td>
+                                    <td class="px-6 py-4 whitespace-nowrap">{{ item.product.price }}€</td>
+                                    <td class="px-6 py-4 whitespace-nowrap">{{ item.total_price|floatformat:2 }}€</td>
+                                </tr>
+                                {% endfor %}
+                                <tr class="bg-gray-50">
+                                    <td colspan="3" class="px-6 py-4 whitespace-nowrap text-right font-bold">Total</td>
+                                    <td class="px-6 py-4 whitespace-nowrap font-bold">{{ total_price|floatformat:2 }}€</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="mt-8">
+                    <h2 class="text-2xl font-bold text-gray-800 mb-4">Payment Method</h2>
+                    <div class="flex space-x-4">
+                        <label class="inline-flex items-center bg-white border rounded-full px-4 py-2 shadow-sm cursor-pointer transition-all duration-200 ease-in-out hover:shadow-md">
+                            <input type="radio" name="payment_method" value="cod" class="form-radio text-indigo-600 h-5 w-5" checked>
+                            <span class="ml-2 text-gray-700"><i class="fas fa-money-bill-wave mr-2 text-green-500"></i>Cash on Delivery</span>
+                        </label>
+                        <label class="inline-flex items-center bg-white border rounded-full px-4 py-2 shadow-sm cursor-pointer transition-all duration-200 ease-in-out hover:shadow-md">
+                            <input type="radio" name="payment_method" value="card" class="form-radio text-indigo-600 h-5 w-5">
+                            <span class="ml-2 text-gray-700"><i class="fas fa-credit-card mr-2 text-blue-500"></i>Credit Card</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="mt-8 text-center">
+                    <button type="submit" class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-all duration-200 ease-in-out transform hover:scale-105">
+                        <i class="fas fa-shopping-cart mr-2"></i> Place Order
+                    </button>
                 </div>
             </form>
-        </section>
-    </main>
-
-    <!-- Footer -->
-    <footer class="bg-gray-800 text-white py-4 mt-auto">
-        <div class="container mx-auto text-center">
-            <p>&copy; 2024 eShop. All rights reserved.</p>
         </div>
-    </footer>
+    </section>
+</div>
 
-</body>
-</html>
+<style>
+    @keyframes fadeInDown {
+        from { opacity: 0; transform: translateY(-20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+    .animate-fade-in-down { animation: fadeInDown 1s ease-out; }
+</style>
+{% endblock %}

@@ -45,6 +45,8 @@ urlpatterns = [
     path('delete-review/<int:review_id>/', views.delete_review, name='delete_review'),
     path('payment/<str:order_id>/', views.payment, name='payment'),
     path('about-us/', about_us, name='about_us'),
+    path('contact/', views.contact, name='contact'),
+    path('faq/', views.faq, name='faq'),
     ]
 
 if settings.DEBUG:

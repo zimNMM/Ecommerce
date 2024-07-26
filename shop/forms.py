@@ -1,6 +1,12 @@
 from django import forms
-from .models import Order, Payment
+from .models import Order, Payment, Contact
 
+
+class ContactForm(forms.ModelForm):
+    class Meta:
+        model = Contact
+        fields = ['name', 'email', 'message']
+        
 class OrderForm(forms.ModelForm):
     class Meta:
         model = Order

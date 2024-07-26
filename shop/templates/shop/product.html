@@ -1,138 +1,102 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ product.name }} - eShop</title>
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-</head>
-<body class="bg-gray-100 flex flex-col min-h-screen">
+{% extends 'shop/base.html' %}
+{% block title %}
+{{ product.name }} - eShop
+{% endblock %}
 
-    <!-- Header -->
-    <header class="bg-white shadow-md py-4">
-        <div class="container mx-auto flex justify-between items-center">
-            <div class="text-2xl font-bold text-gray-800"><a href="{% url 'index' %}">eShop</a></div>
-            <div>
-                <!-- Add other links as needed -->
-            </div>
-            <div class="flex items-center">
-                {% if user.is_authenticated %}
-                    <a href="{% url 'cart' %}" class="mr-2 flex items-center">
-                        <i class="fas fa-shopping-cart text-gray-800 mr-1"></i>
-                        <span class="text-gray-800">Cart</span>
-                    </a>
-                    <a href="{% url 'wishlist' %}" class="mr-2 flex items-center">
-                        <i class="fas fa-heart text-gray-800 mr-1"></i>
-                        <span class="text-gray-800">Wishlist</span>
-                    </a>
-                    <a href="{% url 'about_us' %}" class="mr-2 flex items-center">
-                        <i class="fas fa-info-circle text-gray-800 mr-1"></i>
-                        <span class="text-gray-800">About Us</span>
-                    </a>
-                    <a href="{% url 'logout' %}">
-                        <button class="bg-red-500 text-white px-4 py-2 rounded-md mr-2">Logout</button>
-                    </a>
-                {% else %}
-                    <a href="{% url 'login' %}">
-                        <button class="bg-blue-500 text-white px-4 py-2 rounded-md mr-2">Login</button>
-                    </a>
-                    <a href="{% url 'register' %}">
-                        <button class="bg-green-500 text-white px-4 py-2 rounded-md">Register</button>
-                    </a>
-                {% endif %}
+{% block content %}
+<div class="max-w-4xl mx-auto">
+    <section class="text-center mb-16 animate-fade-in-down">
+        <h1 class="text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-indigo-600 mb-6">{{ product.name }}</h1>
+        <p class="text-xl text-gray-600 mb-8">{{ product.description }}</p>
+        <div class="relative mb-10">
+            <img src="{{ product.image.url }}" width="512" height="512" alt="{{ product.name }}" class="mx-auto rounded-lg shadow-2xl">
+            <div class="absolute top-0 right-0 bg-indigo-600 text-white px-4 py-2 rounded-bl-lg rounded-tr-lg text-2xl font-bold">
+                {{ product.price }}€
             </div>
         </div>
-    </header>
-
-    <!-- Main Content -->
-    <main class="container mx-auto py-10">
-        <section class="text-center mb-12">
-            <h1 class="text-4xl font-bold text-gray-800 mb-4">{{ product.name }}</h1>
-            <p class="text-gray-600 mb-6">{{ product.description }}</p>
-            <p class="text-2xl font-bold text-gray-800 mb-4">{{ product.price }}€</p>
-            <img src="{{ product.image.url }}" width="512" height="512" alt="{{ product.name }}" class="mx-auto mb-6">
-            <p class="text-gray-600 mb-6">Available: {{ product.quantity }}</p>
-            {% if user.is_authenticated %}
-            <form method="post" action="{% url 'add_to_cart' product.product_id %}">
-                {% csrf_token %}
-                <button type="submit" class="bg-green-500 text-white px-6 py-3 rounded-md">Add to Cart</button>
-                <a href="{% url 'add_to_wishlist' product.product_id %}" class="bg-gray-200 text-gray-800 px-4 py-2 rounded-md mt-2 inline-block ml-2">Add to Wishlist</a>    
-            </form>
-            {% else %}
-            <a href="{% url 'login'%}"><button type="submit" class="bg-green-500 text-white px-6 py-3 rounded-md">Add to Cart</button></a>
-            {% endif %}
-        </section>
-        
-        <!-- Display Messages -->
-        {% if messages %}
-        <div class="container mx-auto mb-6">
-            {% for message in messages %}
-                <p class="bg-{{ message.tags }}-100 text-{{ message.tags }}-800 border border-{{ message.tags }}-300 rounded-md p-4 mb-2">
-                    {{ message }}
-                </p>
-            {% endfor %}
-        </div>
+        <p class="text-lg text-gray-600 mb-8">Available: <span class="font-semibold">{{ product.quantity }}</span></p>
+        {% if user.is_authenticated %}
+        <form method="post" action="{% url 'add_to_cart' product.product_id %}" class="mb-6">
+            {% csrf_token %}
+            <button type="submit" class="bg-gradient-to-r from-green-400 to-blue-500 hover:from-green-500 hover:to-blue-600 text-white font-bold px-8 py-4 rounded-full transition duration-300 ease-in-out transform hover:scale-105 mr-4">
+                <i class="fas fa-shopping-cart mr-2"></i> Add to Cart
+            </button>
+            <a href="{% url 'add_to_wishlist' product.product_id %}" class="bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold px-6 py-4 rounded-full transition duration-300 ease-in-out transform hover:scale-105 inline-block">
+                <i class="fas fa-heart mr-2"></i> Add to Wishlist
+            </a>
+        </form>
+        {% else %}
+        <a href="{% url 'login'%}" class="bg-gradient-to-r from-green-400 to-blue-500 hover:from-green-500 hover:to-blue-600 text-white font-bold px-8 py-4 rounded-full transition duration-300 ease-in-out transform hover:scale-105">
+            <i class="fas fa-shopping-cart mr-2"></i> Add to Cart
+        </a>
         {% endif %}
-        
-        <!-- Reviews Section -->
-        <section class="mb-12">
-            <h2 class="text-3xl font-bold text-gray-800 mb-4">Reviews</h2>
-            {% if user.is_authenticated %}
-            <form method="post" action="{% url 'add_review' product.product_id %}" class="mb-6">
-                {% csrf_token %}
-                <div class="mb-4">
-                    <label for="rating" class="block text-gray-700">Rating</label>
-                    <select name="rating" id="rating" class="block w-full mt-1">
-                        <option value="1">1 - Very Poor</option>
-                        <option value="2">2 - Poor</option>
-                        <option value="3">3 - Average</option>
-                        <option value="4">4 - Good</option>
-                        <option value="5">5 - Excellent</option>
-                    </select>
-                </div>
-                <div class="mb-4">
-                    <label for="comment" class="block text-gray-700">Comment</label>
-                    <textarea required name="comment" id="comment" rows="3" class="block w-full mt-1"></textarea>
-                </div>
-                <button type="submit" class="bg-blue-500 text-white px-6 py-3 rounded-md">Submit Review</button>
-            </form>
-            {% else %}
-            <p class="text-gray-700 mb-6">You must be <a href="{% url 'login' %}" class="text-blue-500">logged in</a> to submit a review.</p>
-            {% endif %}
-            
-            {% for review in product.reviews.all %}
-            <div class="bg-white shadow-md rounded-lg p-4 mb-4">
-                <div class="flex justify-between items-center mb-2">
-                    <div class="text-lg font-bold text-gray-800">{{ review.user.username }}</div>
-                    <div class="text-gray-600">
-                        {% for i in "12345" %}
-                            {% if forloop.counter <= review.rating %}
-                                <i class="fas fa-star text-yellow-500"></i>
-                            {% else %}
-                                <i class="fas fa-star text-gray-300"></i>
-                            {% endif %}
-                        {% endfor %}
-                    </div>
-                </div>
-                <div class="text-gray-700 mb-2">{{ review.comment }}</div>
-                <div class="text-gray-500 text-sm">{{ review.created_at|date:"F j, Y, g:i a" }}</div>
-                {% if review.user == user %}
-                <form method="post" action="{% url 'delete_review' review.id %}">
-                    {% csrf_token %}
-                    <button type="submit" class="text-red-500 mt-2">Delete Review</button>
-                </form>
-                {% endif %}
-            </div>
-            {% endfor %}
-        </section>
-    </main>
+    </section>
 
-    <!-- Footer -->
-    <footer class="bg-gray-800 text-white py-4 mt-auto">
-        <div class="container mx-auto text-center">
-            <p>&copy; 2024 eShop. All rights reserved.</p>
+    <!-- Display Messages -->
+    {% if messages %}
+    <div class="container mx-auto mb-10">
+        {% for message in messages %}
+        <p class="bg-{{ message.tags }}-100 text-{{ message.tags }}-800 border border-{{ message.tags }}-300 rounded-lg p-4 mb-2 animate-fade-in-up">
+            {{ message }}
+        </p>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    <!-- Reviews Section -->
+    <section class="mb-16 animate-fade-in-up">
+        <h2 class="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-indigo-600 mb-8">Reviews</h2>
+        {% if user.is_authenticated %}
+        <form method="post" action="{% url 'add_review' product.product_id %}" class="mb-10 bg-white shadow-lg rounded-lg p-6">
+            {% csrf_token %}
+            <div class="mb-6">
+                <label for="rating" class="block text-gray-700 text-lg font-semibold mb-2">Rating</label>
+                <select name="rating" id="rating" class="block w-full mt-1 rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
+                    <option value="1">1 - Very Poor</option>
+                    <option value="2">2 - Poor</option>
+                    <option value="3">3 - Average</option>
+                    <option value="4">4 - Good</option>
+                    <option value="5">5 - Excellent</option>
+                </select>
+            </div>
+            <div class="mb-6">
+                <label for="comment" class="block text-gray-700 text-lg font-semibold mb-2">Comment</label>
+                <textarea required name="comment" id="comment" rows="4" class="block w-full mt-1 rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"></textarea>
+            </div>
+            <button type="submit" class="bg-gradient-to-r from-purple-500 to-indigo-600 text-white font-bold px-6 py-3 rounded-full transition duration-300 ease-in-out transform hover:scale-105">
+                <i class="fas fa-paper-plane mr-2"></i> Submit Review
+            </button>
+        </form>
+        {% else %}
+        <p class="text-gray-700 mb-10 text-lg">You must be <a href="{% url 'login' %}" class="text-indigo-600 hover:text-indigo-800 underline">logged in</a> to submit a review.</p>
+        {% endif %}
+
+        {% for review in product.reviews.all %}
+        <div class="bg-white shadow-lg rounded-lg p-6 mb-6 transition duration-300 ease-in-out transform hover:scale-102">
+            <div class="flex justify-between items-center mb-4">
+                <div class="text-xl font-bold text-gray-800">{{ review.user.username }}</div>
+                <div class="text-gray-600">
+                    {% for i in "12345" %}
+                    {% if forloop.counter <= review.rating %}
+                    <i class="fas fa-star text-yellow-400"></i>
+                    {% else %}
+                    <i class="far fa-star text-gray-300"></i>
+                    {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="text-gray-700 mb-4">{{ review.comment }}</div>
+            <div class="text-gray-500 text-sm">{{ review.created_at|date:"F j, Y, g:i a" }}</div>
+            {% if review.user == user %}
+            <form method="post" action="{% url 'delete_review' review.id %}" class="mt-4">
+                {% csrf_token %}
+                <button type="submit" class="text-red-500 hover:text-red-700 transition duration-300 ease-in-out">
+                    <i class="fas fa-trash-alt mr-2"></i> Delete Review
+                </button>
+            </form>
+            {% endif %}
         </div>
-    </footer>
-</body>
-</html>
+        {% endfor %}
+    </section>
+</div>
+{% endblock %}

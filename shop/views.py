@@ -3,9 +3,10 @@ from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth import login as auth_login, logout as auth_logout
 from django.contrib.auth import authenticate
 from django.contrib import messages
-from shop.forms import OrderForm, PaymentForm
+from shop.forms import OrderForm, PaymentForm, ContactForm
 from .decorators import redirect_authenticated_user, login_required_user
 from .models import Order, OrderItem, Product, Cart, CartItem, Category,Wishlist,WishlistItem, Review, Payment
+
 # Create your views here.
 
 @login_required_user
@@ -249,3 +250,17 @@ def remove_from_wishlist(request, product_id):
 
 def about_us(request):
     return render(request, 'shop/about_us.html')
+
+def faq(request):
+    return render(request, 'shop/faq.html')
+
+def contact(request):
+    if request.method == 'POST':
+        form = ContactForm(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Your message has been sent successfully.')
+            return redirect('contact')
+    else:
+        form = ContactForm()
+    return render(request, 'shop/contact.html', {'form': form})
