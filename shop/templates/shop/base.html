@@ -9,6 +9,18 @@
     <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
 </head>
 <body class="flex flex-col min-h-screen bg-gray-50 font-sans scroll-smooth" x-data="{ mobileMenu: false }">
+    {% if messages %}
+    <div class="messages container mx-auto px-4 py-4" x-data="{ showMessages: true }">
+        {% for message in messages %}
+        <div x-show="showMessages" class="alert {{ message.tags }} bg-white border-l-4 p-4 mb-4 shadow-md rounded-r animate-fade-in-down relative" role="alert">
+            <p class="text-sm pr-8">{{ message }}</p>
+            <button @click="showMessages = false" class="absolute top-2 right-2 text-gray-500 hover:text-gray-700 focus:outline-none">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
     <!-- Header -->
     <header class="bg-white shadow-md sticky top-0 z-50 transition-all duration-300" x-data="{ isScrolled: false }" @scroll.window="isScrolled = (window.pageYOffset > 20)">
         <nav class="container mx-auto px-4 py-3 flex justify-between items-center" :class="{ 'py-2': isScrolled }">
@@ -100,10 +112,12 @@
                 <div>
                     <h4 class="text-2xl font-semibold mb-6">Newsletter</h4>
                     <p class="text-gray-400 mb-4">Stay updated with our latest offers and products.</p>
-                    <form class="flex flex-col sm:flex-row">
-                        <input type="email" placeholder="Your email" class="bg-gray-800 text-white px-4 py-2 rounded-full sm:rounded-l-full sm:rounded-r-none mb-2 sm:mb-0 focus:outline-none focus:ring-2 focus:ring-indigo-600">
+                    <form method="POST" action="{% url 'subscribe_newsletter' %}" class="flex flex-col sm:flex-row">
+                        {% csrf_token %}
+                        <input type="email" name="email" placeholder="Your email" class="bg-gray-800 text-white px-4 py-2 rounded-full sm:rounded-l-full sm:rounded-r-none mb-2 sm:mb-0 focus:outline-none focus:ring-2 focus:ring-indigo-600">
                         <button type="submit" class="bg-gradient-to-r from-purple-500 to-indigo-500 text-white px-6 py-2 rounded-full sm:rounded-l-none sm:rounded-r-full hover:from-purple-600 hover:to-indigo-600 transition">Subscribe</button>
                     </form>
+                    
                 </div>
             </div>
             <div class="mt-12 pt-8 border-t border-gray-800 text-center">

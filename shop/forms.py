@@ -1,6 +1,11 @@
 from django import forms
 from .models import Order, Payment, Contact
+from .models import NewsletterSubscription
 
+class NewsletterForm(forms.ModelForm):
+    class Meta:
+        model = NewsletterSubscription
+        fields = ['email']
 
 class ContactForm(forms.ModelForm):
     class Meta:

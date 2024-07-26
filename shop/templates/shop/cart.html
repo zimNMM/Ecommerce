@@ -104,8 +104,26 @@
 
 <script>
     function updateQuantity(itemId, change) {
-        // Implement AJAX call to update quantity
-        console.log(`Update quantity for item ${itemId} by ${change}`);
+        const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+
+        fetch("{% url 'update_cart_item_quantity' %}", {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': csrftoken
+            },
+            body: JSON.stringify({
+                item_id: itemId,
+                change: change
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            location.reload(); // Refresh the page to update total amount and show messages
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
     }
 </script>
 {% endblock %}

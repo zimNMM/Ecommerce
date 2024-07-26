@@ -145,3 +145,10 @@ class Payment(models.Model):
 
     def __str__(self):
         return f"Payment for Order {self.order.order_id}"
+    
+class NewsletterSubscription(models.Model):
+    email = models.EmailField(unique=True)
+    subscribed_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.email

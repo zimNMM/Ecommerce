@@ -3,10 +3,10 @@ from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth import login as auth_login, logout as auth_logout
 from django.contrib.auth import authenticate
 from django.contrib import messages
-from shop.forms import OrderForm, PaymentForm, ContactForm
+from shop.forms import OrderForm, PaymentForm, ContactForm, NewsletterForm
 from .decorators import redirect_authenticated_user, login_required_user
-from .models import Order, OrderItem, Product, Cart, CartItem, Category,Wishlist,WishlistItem, Review, Payment
-
+from .models import Order, OrderItem, Product, Cart, CartItem, Category,Wishlist,WishlistItem, Review, Payment, NewsletterSubscription
+from django.http import JsonResponse
 # Create your views here.
 
 @login_required_user
@@ -45,6 +45,20 @@ def delete_review(request, review_id):
 #index view
 def index(request):
     return render(request, 'shop/index.html')
+
+def subscribe_newsletter(request):
+    if request.method == 'POST':
+        form = NewsletterForm(request.POST)
+        email = request.POST.get('email')  # Extract email from POST data
+        if email and NewsletterSubscription.objects.filter(email=email).exists():
+            messages.warning(request, 'You are already subscribed.')
+        elif form.is_valid():
+            form.save()
+            messages.success(request, 'Successfully subscribed to the newsletter.')
+        else:
+            messages.error(request, 'Invalid email address.')
+    return redirect('index')
+
 
 def mobilephone(request):
     category = get_object_or_404(Category, name="Mobile Phones")
@@ -264,3 +278,42 @@ def contact(request):
     else:
         form = ContactForm()
     return render(request, 'shop/contact.html', {'form': form})
+
+from django.http import JsonResponse
+import json
+
+@login_required_user
+def update_cart_item_quantity(request):
+    if request.method == 'POST':
+        try:
+            data = json.loads(request.body)
+            item_id = data.get('item_id')
+            change = data.get('change')
+
+            if item_id is None or change is None:
+                messages.error(request, 'Invalid data provided')
+                return JsonResponse({'status': 'error'}, status=400)
+
+            change = int(change)
+            
+            cart_item = get_object_or_404(CartItem, id=item_id, cart__user=request.user)
+            
+            if change == -1 and cart_item.quantity > 1:
+                cart_item.quantity -= 1
+                messages.success(request, f'Updated quantity for {cart_item.product.name}.')
+            elif change == 1 and cart_item.quantity < cart_item.product.quantity:
+                cart_item.quantity += 1
+                messages.success(request, f'Updated quantity for {cart_item.product.name}.')
+            elif change == -1 and cart_item.quantity == 1:
+                messages.error(request, 'Quantity cannot be less than 1.')
+            else:
+                messages.error(request, f'Cannot add more {cart_item.product.name}. Only {cart_item.product.quantity} in stock.')
+                return JsonResponse({'status': 'error'})
+            
+            cart_item.save()
+            return JsonResponse({'status': 'success'})
+        except (ValueError, KeyError, json.JSONDecodeError) as e:
+            messages.error(request, 'Invalid request')
+            return JsonResponse({'status': 'error'}, status=400)
+    messages.error(request, 'Invalid request method')
+    return JsonResponse({'status': 'error'}, status=400)

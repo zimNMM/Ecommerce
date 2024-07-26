@@ -47,6 +47,8 @@ urlpatterns = [
     path('about-us/', about_us, name='about_us'),
     path('contact/', views.contact, name='contact'),
     path('faq/', views.faq, name='faq'),
+    path('update-cart-item-quantity/', views.update_cart_item_quantity, name='update_cart_item_quantity'),
+    path('subscribe/', views.subscribe_newsletter, name='subscribe_newsletter'),
     ]
 
 if settings.DEBUG:
