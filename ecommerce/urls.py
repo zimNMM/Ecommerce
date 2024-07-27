@@ -49,6 +49,8 @@ urlpatterns = [
     path('faq/', views.faq, name='faq'),
     path('update-cart-item-quantity/', views.update_cart_item_quantity, name='update_cart_item_quantity'),
     path('subscribe/', views.subscribe_newsletter, name='subscribe_newsletter'),
+    path('order/<str:order_id>/', views.order_detail, name='order_detail'),
+    path('search/', views.search, name='search'),
     ]
 
 if settings.DEBUG:

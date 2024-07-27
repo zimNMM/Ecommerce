@@ -7,12 +7,34 @@ from shop.forms import OrderForm, PaymentForm, ContactForm, NewsletterForm
 from .decorators import redirect_authenticated_user, login_required_user
 from .models import Order, OrderItem, Product, Cart, CartItem, Category,Wishlist,WishlistItem, Review, Payment, NewsletterSubscription
 from django.http import JsonResponse
+from django.db.models import Q
 # Create your views here.
+def search(request):
+    query = request.GET.get('q')
+    if query:
+        products = Product.objects.filter(
+            Q(name__icontains=query) |
+            Q(description__icontains=query)
+        )
+    else:
+        products = Product.objects.none()
+    
+    return render(request, 'shop/search_results.html', {'products': products, 'query': query})
+
 
 @login_required_user
 def my_orders(request):
     orders = Order.objects.filter(user=request.user).order_by('-created_at')
     return render(request, 'shop/my_orders.html', {'orders': orders})
+
+
+@login_required_user
+def order_detail(request, order_id):
+    order = get_object_or_404(Order, order_id=order_id)
+    if order.user != request.user:
+        messages.error(request, "You do not have permission to view this order.")
+        return redirect('index')  # Redirect to the homepage or any other appropriate page
+    return render(request, 'shop/order_detail.html', {'order': order})
 
 @login_required_user
 def add_review(request, product_id):

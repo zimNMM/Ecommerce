@@ -1,6 +1,5 @@
 {% extends 'shop/base.html' %}
 {% block title %}Tablets{% endblock %}
-
 {% block content %}
 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <section class="text-center mb-16 animate-fade-in-down">
@@ -12,9 +11,20 @@
         </p>
     </section>
 
-    <div class="grid grid-cols-1 gap-y-10 sm:grid-cols-2 gap-x-6 lg:grid-cols-3 xl:gap-x-8">
+    <!-- Sorting options -->
+    <div class="mb-8 flex justify-end">
+        <select id="sort-select" class="bg-white border border-gray-300 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+            <option value="default">Sort by</option>
+            <option value="price-asc">Price: Low to High</option>
+            <option value="price-desc">Price: High to Low</option>
+            <option value="name-asc">Name: A to Z</option>
+            <option value="name-desc">Name: Z to A</option>
+        </select>
+    </div>
+
+    <div id="product-grid" class="grid grid-cols-1 gap-y-10 sm:grid-cols-2 gap-x-6 lg:grid-cols-3 xl:gap-x-8">
         {% for product in products %}
-        <div class="bg-white shadow-lg rounded-lg overflow-hidden flex flex-col transition duration-300 ease-in-out transform hover:shadow-xl">
+        <div class="bg-white shadow-lg rounded-lg overflow-hidden flex flex-col transition duration-300 ease-in-out transform hover:shadow-xl hover:-translate-y-1" data-price="{{ product.price }}" data-name="{{ product.name }}">
             <a href="{% url 'product_detail' product.product_id %}" class="relative w-full h-64 bg-gray-200 overflow-hidden">
                 <img src="{{ product.image.url }}" alt="{{ product.name }}" class="w-full h-full object-contain transition duration-300 ease-in-out transform hover:scale-105">
             </a>
@@ -52,4 +62,39 @@
         {% endfor %}
     </div>
 </div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const sortSelect = document.getElementById('sort-select');
+        const productGrid = document.getElementById('product-grid');
+
+        sortSelect.addEventListener('change', function() {
+            const sortValue = this.value;
+            const products = Array.from(productGrid.children);
+
+            products.sort((a, b) => {
+                const aPrice = parseFloat(a.dataset.price);
+                const bPrice = parseFloat(b.dataset.price);
+                const aName = a.dataset.name.toLowerCase();
+                const bName = b.dataset.name.toLowerCase();
+
+                switch (sortValue) {
+                    case 'price-asc':
+                        return aPrice - bPrice;
+                    case 'price-desc':
+                        return bPrice - aPrice;
+                    case 'name-asc':
+                        return aName.localeCompare(bName);
+                    case 'name-desc':
+                        return bName.localeCompare(aName);
+                    default:
+                        return 0;
+                }
+            });
+
+            productGrid.innerHTML = '';
+            products.forEach(product => productGrid.appendChild(product));
+        });
+    });
+</script>
 {% endblock %}

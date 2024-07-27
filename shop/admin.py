@@ -1,6 +1,6 @@
 import random
 from django.contrib import admin
-from shop.models import Category, Product, Cart, CartItem, Order, OrderItem, Wishlist, WishlistItem, Review, Payment,Contact
+from shop.models import Category, Product, Cart, CartItem, Order, OrderItem, Wishlist, WishlistItem, Review, Payment,Contact,NewsletterSubscription
 
 class PaymentAdmin(admin.ModelAdmin):
     list_display = ('order', 'method', 'card_number', 'card_expiry_date', 'card_cvc')
@@ -29,6 +29,10 @@ class CartAdmin(admin.ModelAdmin):
 class OrderItemInline(admin.TabularInline):
     model = OrderItem
     raw_id_fields = ('product',)
+
+class NewsletterSubscriptionAdmin(admin.ModelAdmin):
+    list_display = ('email',)
+    search_fields = ('email',)
 
 def generate_tracking_id():
     return ''.join([str(random.randint(0, 9)) for _ in range(10)])
@@ -91,7 +95,7 @@ class ReviewAdmin(admin.ModelAdmin):
 class ContactAdmin(admin.ModelAdmin):
     list_display = ('name', 'email', 'created_at')
     search_fields = ('name', 'email')
-
+admin.site.register(NewsletterSubscription, NewsletterSubscriptionAdmin)
 admin.site.register(Contact, ContactAdmin)
 admin.site.register(Category, CategoryAdmin)
 admin.site.register(Product, ProductAdmin)

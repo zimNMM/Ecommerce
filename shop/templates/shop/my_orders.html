@@ -21,7 +21,11 @@
                     <tbody class="divide-y divide-gray-200">
                         {% for order in orders %}
                         <tr class="hover:bg-gray-50 transition-colors duration-200">
-                            <td class="py-4 px-4 font-medium">{{ order.order_id }}</td>
+                            <td class="py-4 px-4 font-medium">
+                                <a href="{% url 'order_detail' order.order_id %}" class="text-indigo-600 hover:text-indigo-900">
+                                    {{ order.order_id }}
+                                </a>
+                            </td>
                             <td class="py-4 px-4">{{ order.tracking_id }}</td>
                             <td class="py-4 px-4">
                                 {% if order.status == 'processing' %}
