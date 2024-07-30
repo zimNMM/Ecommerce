@@ -1,0 +1,82 @@
+{% extends 'shop/base.html' %}
+{% block title %}{{ category.name }} - eShop{% endblock %}
+{% block content %}
+
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="section text-center mb-16 animate-fade-in-down">
+        <h1 class="text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-indigo-600 mb-6">
+            {{ category.name }}
+        </h1>
+        <p>{{ category.description }}</p>
+    </div>
+
+    <div class="mb-8 flex justify-end">
+        <select id="sort-select" class="border rounded px-2 py-1">
+            <option value="price_asc">Price: Low to High</option>
+            <option value="price_desc">Price: High to Low</option>
+            <option value="name_asc">Name: A to Z</option>
+            <option value="name_desc">Name: Z to A</option>
+        </select>
+    </div>
+
+    <div id="product-grid" class="grid grid-cols-1 gap-y-10 sm:grid-cols-2 gap-x-6 lg:grid-cols-3 xl:gap-x-8">
+        {% for product in products %}
+        <div class="bg-white shadow-lg rounded-lg overflow-hidden flex flex-col transition duration-300 ease-in-out transform hover:shadow-xl hover:-translate-y-1" data-price="{{ product.price }}" data-name="{{ product.name }}">
+            <a href="{% url 'product_detail' product.product_id %}" class="relative w-full h-64 bg-gray-200 overflow-hidden">
+                <img src="{{ product.image.url }}" alt="{{ product.name }}" class="w-full h-full object-contain transition duration-300 ease-in-out transform hover:scale-105">
+            </a>
+            <div class="p-6 flex-grow flex flex-col justify-between">
+                <div>
+                    <h3 class="text-xl font-semibold text-gray-900 mb-2">
+                        <a href="{% url 'product_detail' product.product_id %}" class="hover:text-indigo-600 transition duration-300">{{ product.name }}</a>
+                    </h3>
+                    <p>{{ product.description|truncatechars:100 }}</p>
+                    <p class="mt-2 text-lg font-bold text-indigo-600">{{ product.price }}€</p>
+                    <p>Available: {{ product.quantity }}</p>
+                </div>
+                <div class="mt-6 grid grid-cols-2 gap-3">
+                    <form method="post" action="{% url 'add_to_cart' product.product_id %}">
+                        {% csrf_token %}
+                        <button type="submit" class="w-full bg-indigo-600 text-white px-4 py-2 rounded-full hover:bg-indigo-700 transition duration-300">Add to Cart</button>
+                    </form>
+                    {% if user.is_authenticated %}
+                    <form method="post" action="{% url 'add_to_wishlist' product.product_id %}">
+                        {% csrf_token %}
+                        <button type="submit" class="w-full bg-gray-200 text-gray-800 px-4 py-2 rounded-full hover:bg-gray-300 transition duration-300">Wishlist</button>
+                    </form>
+                    {% else %}
+                    <div></div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const sortSelect = document.getElementById('sort-select');
+    const productGrid = document.getElementById('product-grid');
+
+    sortSelect.addEventListener('change', function() {
+        const sortValue = this.value;
+        const products = Array.from(productGrid.children);
+
+        products.sort((a, b) => {
+            const aValue = a.dataset[sortValue.split('_')[0]];
+            const bValue = b.dataset[sortValue.split('_')[0]];
+
+            if (sortValue.endsWith('asc')) {
+                return aValue.localeCompare(bValue, undefined, {numeric: true});
+            } else {
+                return bValue.localeCompare(aValue, undefined, {numeric: true});
+            }
+        });
+
+        products.forEach(product => productGrid.appendChild(product));
+    });
+});
+</script>
+
+{% endblock %}

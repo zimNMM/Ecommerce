@@ -66,7 +66,8 @@ def delete_review(request, review_id):
     return redirect('product_detail', product_id=review.product.product_id)
 #index view
 def index(request):
-    return render(request, 'shop/index.html')
+    categories = Category.objects.all()
+    return render(request, 'shop/index.html', {'categories': categories})
 
 def subscribe_newsletter(request):
     if request.method == 'POST':
@@ -81,31 +82,14 @@ def subscribe_newsletter(request):
             messages.error(request, 'Invalid email address.')
     return redirect('index')
 
-
-def mobilephone(request):
-    category = get_object_or_404(Category, name="Mobile Phones")
-    category_description = category.description
+def category_view(request, category_name):
+    category = get_object_or_404(Category, name__iexact=category_name)
     products = Product.objects.filter(category=category)
-    return render(request, 'shop/mobilephone.html', {'products': products, 'category_description': category_description})
-
-def laptop(request):
-    category = get_object_or_404(Category, name="Laptops")
-    category_description = category.description
-    products = Product.objects.filter(category=category)
-    return render(request, 'shop/laptop.html', {'products': products, 'category_description': category_description})
-
-def tablet(request):
-    category = get_object_or_404(Category, name="Tablets")
-    category_description = category.description
-    products = Product.objects.filter(category=category)
-    return render(request, 'shop/tablet.html' ,{'products': products, 'category_description': category_description})
-
-def accessories(request):
-    category = get_object_or_404(Category, name="Accessories")
-    category_description = category.description
-    products = Product.objects.filter(category=category)
-    return render(request, 'shop/accessories.html', {'products': products, 'category_description': category_description})
-
+    context = {
+        'category': category,
+        'products': products,
+    }
+    return render(request, 'shop/category.html', context)
 
 def product_detail(request, product_id):
     product = get_object_or_404(Product, product_id=product_id)

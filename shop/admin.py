@@ -10,7 +10,9 @@ class PaymentAdmin(admin.ModelAdmin):
 class CategoryAdmin(admin.ModelAdmin):
     list_display = ('name', 'description')
     search_fields = ('name',)
-
+    list_display_links = ('name',)
+    fields = ('name', 'description', 'image')
+    
 class ProductAdmin(admin.ModelAdmin):
     list_display = ('name', 'category', 'price', 'quantity', 'available')
     list_filter = ('available', 'category')

@@ -1,68 +1,129 @@
 {% extends 'shop/base.html' %}
 
-{% block title %}
-    Welcome to eShop
-{% endblock %}
+{% block title %}Welcome to eShop - Tech Reimagined{% endblock %}
 
 {% block content %}
+
 <!-- Hero Section -->
-<section class="text-center mb-20">
-    <h1 class="text-6xl font-bold mb-6 text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-indigo-600 animate-fade-in-down">Welcome to eShop</h1>
-    <p class="text-2xl text-gray-600 mb-10 animate-fade-in-up">Unleash the Future: Cutting-Edge Tech at Your Fingertips</p>
+<section class="text-center mb-20 pt-10">
+    <h1 class="text-6xl font-bold mb-6 text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-indigo-600 animate-fade-in-down">
+        Welcome to eShop
+    </h1>
+    <p class="text-2xl text-gray-600 mb-10 animate-fade-in-up">
+        Unleash the Future: Cutting-Edge Tech at Your Fingertips
+    </p>
     {% if user.is_authenticated %}
-        <a href="{% url 'my_orders' %}" class="bg-gradient-to-r from-purple-500 to-indigo-500 text-white px-10 py-4 rounded-full text-lg hover:from-purple-600 hover:to-indigo-600 transition transform hover:scale-105 inline-block">My Orders</a>
+        <a href="{% url 'my_orders' %}" class="bg-gradient-to-r from-purple-500 to-indigo-500 text-white px-10 py-4 rounded-full text-lg hover:from-purple-600 hover:to-indigo-600 transition-all duration-300 transform hover:scale-105 inline-block shadow-lg">
+            My Orders
+        </a>
     {% else %}
-        <a href="{% url 'register' %}" class="bg-gradient-to-r from-purple-500 to-indigo-500 text-white px-10 py-4 rounded-full text-lg hover:from-purple-600 hover:to-indigo-600 transition transform hover:scale-105 inline-block">Explore Now</a>
+        <a href="{% url 'register' %}" class="bg-gradient-to-r from-purple-500 to-indigo-500 text-white px-10 py-4 rounded-full text-lg hover:from-purple-600 hover:to-indigo-600 transition-all duration-300 transform hover:scale-105 inline-block shadow-lg">
+            Explore Now
+        </a>
     {% endif %}
 </section>
 
 <!-- Categories Section -->
-<section id="categories" class="mb-20">
-    <h2 class="text-4xl font-bold mb-12 text-center text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-indigo-600">Discover Our Tech Universe</h2>
+<section id="categories" class="section mb-20">
+    <h2 class="text-4xl font-bold mb-12 text-center text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-indigo-600">
+        Discover Our Tech Universe
+    </h2>
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10">
-        <!-- Category Card - Laptops -->
-        <div class="bg-white rounded-2xl shadow-xl overflow-hidden transform hover:scale-105 transition duration-300 group">
-            <div class="p-8 flex flex-col items-center">
-                <div class="w-24 h-24 bg-blue-100 rounded-full flex items-center justify-center mb-6 group-hover:bg-blue-200 transition-colors duration-300">
-                    <i class="fas fa-laptop text-blue-600 text-4xl group-hover:scale-110 transition-transform duration-300"></i>
+        {% for category in categories %}
+        <div class="bg-white rounded-2xl shadow-xl overflow-hidden transform hover:scale-105 transition-all duration-300 group">
+            <div class="h-64 bg-gray-100 flex items-center justify-center overflow-hidden">
+                {% if category.image %}
+                <img src="{{ category.image.url }}" alt="{{ category.name }}" class="w-full h-full object-contain p-4 group-hover:scale-110 transition-transform duration-300">
+                {% else %}
+                <span class="text-gray-400 text-4xl">No Image</span>
+                {% endif %}
+            </div>
+            <div class="p-6">
+                <h3 class="text-2xl font-semibold text-gray-800 mb-2">{{ category.name }}</h3>
+                <p class="text-gray-600 mb-4 h-20 overflow-hidden">{{ category.description|truncatechars:100 }}</p>
+                <div class="text-center">
+                    <a href="{% url 'category' category.name %}" class="mt-4 inline-block bg-blue-600 text-white px-6 py-2 rounded-full hover:bg-blue-700 transition-colors duration-300 shadow-md">
+                        Shop Now
+                    </a>
                 </div>
-                <h3 class="text-2xl font-semibold text-gray-800 mb-4">Laptops</h3>
-                <a href="{% url 'laptop' %}" class="mt-4 bg-blue-600 text-white px-6 py-2 rounded-full hover:bg-blue-700 transition">Shop Now</a>
             </div>
         </div>
-        
-        <!-- Category Card - Mobile Phones -->
-        <div class="bg-white rounded-2xl shadow-xl overflow-hidden transform hover:scale-105 transition duration-300 group">
-            <div class="p-8 flex flex-col items-center">
-                <div class="w-24 h-24 bg-green-100 rounded-full flex items-center justify-center mb-6 group-hover:bg-green-200 transition-colors duration-300">
-                    <i class="fas fa-mobile-alt text-green-600 text-4xl group-hover:scale-110 transition-transform duration-300"></i>
+        {% endfor %}
+    </div>
+</section>
+<!-- Testimonials Section -->
+<section id="testimonials" class="mb-20 bg-gray-100 py-16 rounded-3xl">
+    <h2 class="text-4xl font-bold mb-12 text-center text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-indigo-600">
+        What Our Customers Say
+    </h2>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8 px-4">
+        <!-- Testimonial 1 -->
+        <div class="bg-white rounded-2xl shadow-xl p-6 transform hover:scale-105 transition-all duration-300">
+            <div class="flex flex-col items-center mb-4">
+                <img src="https://api.dicebear.com/6.x/avataaars/svg?seed=Copernico" alt="Copernico Saradohora" class="w-20 h-20 rounded-full mb-2">
+                <h3 class="text-xl font-semibold text-gray-800">Copernico Saradohora</h3>
+                <div class="text-yellow-400 flex mt-1">
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star-half-alt"></i>
                 </div>
-                <h3 class="text-2xl font-semibold text-gray-800 mb-4">Mobile Phones</h3>
-                <a href="{% url 'mobilephone' %}" class="mt-4 bg-green-600 text-white px-6 py-2 rounded-full hover:bg-green-700 transition">Shop Now</a>
             </div>
+            <p class="text-gray-600 text-center italic">"I thought I was tech-savvy until I visited eShop. Now I'm pretty sure my toaster is smarter than me. At least it doesn't burn the bread like I do!"</p>
         </div>
-        
-        <!-- Category Card - Tablets -->
-        <div class="bg-white rounded-2xl shadow-xl overflow-hidden transform hover:scale-105 transition duration-300 group">
-            <div class="p-8 flex flex-col items-center">
-                <div class="w-24 h-24 bg-purple-100 rounded-full flex items-center justify-center mb-6 group-hover:bg-purple-200 transition-colors duration-300">
-                    <i class="fas fa-tablet-alt text-purple-600 text-4xl group-hover:scale-110 transition-transform duration-300"></i>
+
+        <!-- Testimonial 2 -->
+        <div class="bg-white rounded-2xl shadow-xl p-6 transform hover:scale-105 transition-all duration-300">
+            <div class="flex flex-col items-center mb-4">
+                <img src="https://api.dicebear.com/6.x/avataaars/svg?seed=Malakek" alt="Malakek Soukamon" class="w-20 h-20 rounded-full mb-2">
+                <h3 class="text-xl font-semibold text-gray-800">Malakek Soukamon</h3>
+                <div class="text-yellow-400 flex mt-1">
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
                 </div>
-                <h3 class="text-2xl font-semibold text-gray-800 mb-4">Tablets</h3>
-                <a href="{% url 'tablet' %}" class="mt-4 bg-purple-600 text-white px-6 py-2 rounded-full hover:bg-purple-700 transition">Shop Now</a>
             </div>
+            <p class="text-gray-600 text-center italic">"Thanks to eShop, I now have a smart home. The only problem is, it's smarter than me and keeps locking me out. At least the customer service is great!"</p>
         </div>
-        
-        <!-- Category Card - Accessories -->
-        <div class="bg-white rounded-2xl shadow-xl overflow-hidden transform hover:scale-105 transition duration-300 group">
-            <div class="p-8 flex flex-col items-center">
-                <div class="w-24 h-24 bg-red-100 rounded-full flex items-center justify-center mb-6 group-hover:bg-red-200 transition-colors duration-300">
-                    <i class="fas fa-headphones-alt text-red-600 text-4xl group-hover:scale-110 transition-transform duration-300"></i>
+
+        <!-- Testimonial 3 -->
+        <div class="bg-white rounded-2xl shadow-xl p-6 transform hover:scale-105 transition-all duration-300">
+            <div class="flex flex-col items-center mb-4">
+                <img src="https://api.dicebear.com/6.x/avataaars/svg?seed=George" alt="George Fiance" class="w-20 h-20 rounded-full mb-2">
+                <h3 class="text-xl font-semibold text-gray-800">George Fiance</h3>
+                <div class="text-yellow-400 flex mt-1">
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="far fa-star"></i>
                 </div>
-                <h3 class="text-2xl font-semibold text-gray-800 mb-4">Accessories</h3>
-                <a href="{% url 'accessories' %}" class="mt-4 bg-red-600 text-white px-6 py-2 rounded-full hover:bg-red-700 transition">Shop Now</a>
             </div>
+            <p class="text-gray-600 text-center italic">"I bought a virtual reality headset from eShop. Now my imaginary friends have become too realistic. On the bright side, they're great at tech support!"</p>
         </div>
     </div>
+</section>
+
+<!-- Call to Action -->
+<section id="cta" class="mb-20 text-center">
+    <h2 class="text-4xl font-bold mb-6 text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-indigo-600">
+        Ready to Upgrade Your Tech?
+    </h2>
+    <p class="text-xl text-gray-600 mb-10">
+        Join thousands of satisfied customers and experience the future of technology today.
+    </p>
+    {% if user.is_authenticated %}
+    <a href="{% url 'my_orders' %}" class="bg-gradient-to-r from-purple-500 to-indigo-500 text-white px-10 py-4 rounded-full text-lg hover:from-purple-600 hover:to-indigo-600 transition-all duration-300 transform hover:scale-105 inline-block shadow-lg">
+        My Orders
+    </a>
+{% else %}
+<a href="{% url 'register' %}" class="bg-gradient-to-r from-purple-500 to-indigo-500 text-white px-10 py-4 rounded-full text-lg hover:from-purple-600 hover:to-indigo-600 transition-all duration-300 transform hover:scale-105 inline-block shadow-lg">
+    Get Started
+</a>
+{% endif %}
+
 </section>
 {% endblock %}

@@ -23,10 +23,7 @@ from shop.views import about_us
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.index, name='index'),
-    path('mobilephone/', views.mobilephone, name='mobilephone'),
-    path('laptop/', views.laptop, name='laptop'),
-    path('tablet/', views.tablet, name='tablet'),
-    path('accessories/', views.accessories, name='accessories'),
+    path('category/<str:category_name>/', views.category_view, name='category'),
     path('register/', views.register, name='register'),
     path('login/', views.login, name='login'),
     path('logout/', views.logout, name='logout'),
