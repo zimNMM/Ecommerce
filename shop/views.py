@@ -33,8 +33,27 @@ def order_detail(request, order_id):
     order = get_object_or_404(Order, order_id=order_id)
     if order.user != request.user:
         messages.error(request, "You do not have permission to view this order.")
-        return redirect('index')  # Redirect to the homepage or any other appropriate page
-    return render(request, 'shop/order_detail.html', {'order': order})
+        return redirect('index')
+    
+    order_items = []
+    total_price = 0
+    for item in order.items.all():
+        item_total = item.product.price * item.quantity
+        order_items.append({
+            'product': item.product,
+            'quantity': item.quantity,
+            'price': item.product.price,
+            'total': item_total
+        })
+        total_price += item_total
+    
+    context = {
+        'order': order,
+        'order_items': order_items,
+        'total_price': total_price
+    }
+    
+    return render(request, 'shop/order_detail.html', context)
 
 @login_required_user
 def add_review(request, product_id):
@@ -323,3 +342,14 @@ def update_cart_item_quantity(request):
             return JsonResponse({'status': 'error'}, status=400)
     messages.error(request, 'Invalid request method')
     return JsonResponse({'status': 'error'}, status=400)
+
+@login_required_user
+def cancel_order(request, order_id):
+    order = get_object_or_404(Order, order_id=order_id, user=request.user)
+    if order.status == 'processing':
+        order.status = 'cancelled'
+        order.save()
+        messages.success(request, f"Order {order.order_id} has been cancelled.")
+    else:
+        messages.error(request, "This order cannot be cancelled.")
+    return redirect('order_detail', order_id=order_id)

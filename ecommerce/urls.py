@@ -48,6 +48,7 @@ urlpatterns = [
     path('subscribe/', views.subscribe_newsletter, name='subscribe_newsletter'),
     path('order/<str:order_id>/', views.order_detail, name='order_detail'),
     path('search/', views.search, name='search'),
+    path('cancel-order/<str:order_id>/', views.cancel_order, name='cancel_order'),
     ]
 
 if settings.DEBUG:
