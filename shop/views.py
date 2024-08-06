@@ -1,9 +1,8 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
-from django.contrib.auth import login as auth_login, logout as auth_logout
-from django.contrib.auth import authenticate
+from django.contrib.auth import login as auth_login, logout as auth_logout, authenticate
 from django.contrib import messages
-from shop.forms import OrderForm, PaymentForm, ContactForm, NewsletterForm
+from shop.forms import OrderForm, PaymentForm, ContactForm, NewsletterForm, CustomUserCreationForm, CustomAuthenticationForm
 from .decorators import redirect_authenticated_user, login_required_user
 from .models import Order, OrderItem, Product, Cart, CartItem, Category,Wishlist,WishlistItem, Review, Payment, NewsletterSubscription
 from django.http import JsonResponse
@@ -120,28 +119,31 @@ def product_detail(request, product_id):
 @redirect_authenticated_user
 def register(request):
     if request.method == 'POST':
-        form = UserCreationForm(request.POST)
+        form = CustomUserCreationForm(request.POST)
         if form.is_valid():
             user = form.save()
-            username = form.cleaned_data.get('username')
-            password = form.cleaned_data.get('password1')
-            user = authenticate(username=username, password=password)
             auth_login(request, user)
             return redirect('index')
+        else:
+            for field, errors in form.errors.items():
+                for error in errors:
+                    messages.error(request, f"{field.capitalize()}: {error}")
     else:
-        form = UserCreationForm()
+        form = CustomUserCreationForm()
     return render(request, 'shop/register.html', {'form': form})
 #create a login view using shop/login.html template
 @redirect_authenticated_user
 def login(request):
     if request.method == 'POST':
-        form = AuthenticationForm(request, data=request.POST)
+        form = CustomAuthenticationForm(request, data=request.POST)
         if form.is_valid():
             user = form.get_user()
             auth_login(request, user)
-            return redirect('index')  
+            return redirect('index')
+        else:
+            messages.error(request, 'Invalid username or password. Please try again.')
     else:
-        form = AuthenticationForm()
+        form = CustomAuthenticationForm()
     return render(request, 'shop/login.html', {'form': form})
 #create logout 
 @login_required_user
