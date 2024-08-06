@@ -29,6 +29,7 @@ class CustomUserCreationForm(UserCreationForm):
         })
         self.fields['captcha'].widget.attrs.update({
             'class': 'w-full px-4 py-2 rounded-full border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200',
+            'placeholder': 'Enter the captcha'
         })
 
 class CustomAuthenticationForm(AuthenticationForm):

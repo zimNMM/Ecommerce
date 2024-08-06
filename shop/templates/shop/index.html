@@ -9,6 +9,7 @@
     <p>This is a preview of a student project and not a real e-commerce shop. You can find the source code at <a href="https://github.com/zimNMM/ecommerce" class="text-blue-600 hover:underline">https://github.com/zimNMM/ecommerce</a>.</p>
     <p>Please note that this is not a production-ready application and should not be used for real transactions.</p>
 </section>
+
 <!-- Hero Section -->
 <section class="text-center mb-20 pt-10">
     <h1 class="text-6xl font-bold mb-6 text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-indigo-600 animate-fade-in-down">
@@ -29,25 +30,28 @@
 </section>
 
 <!-- Categories Section -->
-<section id="categories" class="section mb-20">
+<section id="categories" class="section mb-20 px-4">
     <h2 class="text-4xl font-bold mb-12 text-center text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-indigo-600">
         Discover Our Tech Universe
     </h2>
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10">
         {% for category in categories %}
         <div class="bg-white rounded-2xl shadow-xl overflow-hidden transform hover:scale-105 transition-all duration-300 group">
-            <div class="h-64 bg-gray-100 flex items-center justify-center overflow-hidden">
+            <div class="h-64 bg-gradient-to-br from-purple-100 to-indigo-100 flex items-center justify-center overflow-hidden relative">
                 {% if category.image %}
                 <img src="{{ category.image.url }}" alt="{{ category.name }}" class="w-full h-full object-contain p-4 group-hover:scale-110 transition-transform duration-300">
                 {% else %}
                 <span class="text-gray-400 text-4xl">No Image</span>
                 {% endif %}
+                <div class="absolute inset-0 bg-black bg-opacity-40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                    <span class="text-white text-xl font-semibold">Explore {{ category.name }}</span>
+                </div>
             </div>
-            <div class="p-6">
+            <div class="p-6 bg-gradient-to-b from-white to-purple-50">
                 <h3 class="text-2xl font-semibold text-gray-800 mb-2">{{ category.name }}</h3>
                 <p class="text-gray-600 mb-4 h-20 overflow-hidden">{{ category.description|truncatechars:100 }}</p>
                 <div class="text-center">
-                    <a href="{% url 'category' category.name %}" class="mt-4 inline-block bg-blue-600 text-white px-6 py-2 rounded-full hover:bg-blue-700 transition-colors duration-300 shadow-md">
+                    <a href="{% url 'category' category.name %}" class="mt-4 inline-block bg-gradient-to-r from-purple-500 to-indigo-500 text-white px-6 py-2 rounded-full hover:from-purple-600 hover:to-indigo-600 transition-colors duration-300 shadow-md transform hover:scale-105">
                         Shop Now
                     </a>
                 </div>
@@ -56,16 +60,17 @@
         {% endfor %}
     </div>
 </section>
+
 <!-- Testimonials Section -->
-<section id="testimonials" class="mb-20 bg-gray-100 py-16 rounded-3xl">
+<section id="testimonials" class="mb-20 bg-gradient-to-br from-purple-100 to-indigo-100 py-16 rounded-3xl px-4">
     <h2 class="text-4xl font-bold mb-12 text-center text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-indigo-600">
         What Our Customers Say
     </h2>
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-8 px-4">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
         <!-- Testimonial 1 -->
         <div class="bg-white rounded-2xl shadow-xl p-6 transform hover:scale-105 transition-all duration-300">
             <div class="flex flex-col items-center mb-4">
-                <img src="https://api.dicebear.com/6.x/avataaars/svg?seed=Copernico" alt="Copernico Saradohora" class="w-20 h-20 rounded-full mb-2">
+                <img src="https://api.dicebear.com/6.x/avataaars/svg?seed=Copernico" alt="Copernico Saradohora" class="w-20 h-20 rounded-full mb-2 border-4 border-purple-300">
                 <h3 class="text-xl font-semibold text-gray-800">Copernico Saradohora</h3>
                 <div class="text-yellow-400 flex mt-1">
                     <i class="fas fa-star"></i>
@@ -81,7 +86,7 @@
         <!-- Testimonial 2 -->
         <div class="bg-white rounded-2xl shadow-xl p-6 transform hover:scale-105 transition-all duration-300">
             <div class="flex flex-col items-center mb-4">
-                <img src="https://api.dicebear.com/6.x/avataaars/svg?seed=Malakek" alt="Malakek Soukamon" class="w-20 h-20 rounded-full mb-2">
+                <img src="https://api.dicebear.com/6.x/avataaars/svg?seed=Malakek" alt="Malakek Soukamon" class="w-20 h-20 rounded-full mb-2 border-4 border-indigo-300">
                 <h3 class="text-xl font-semibold text-gray-800">Malakek Soukamon</h3>
                 <div class="text-yellow-400 flex mt-1">
                     <i class="fas fa-star"></i>
@@ -97,7 +102,7 @@
         <!-- Testimonial 3 -->
         <div class="bg-white rounded-2xl shadow-xl p-6 transform hover:scale-105 transition-all duration-300">
             <div class="flex flex-col items-center mb-4">
-                <img src="https://api.dicebear.com/6.x/avataaars/svg?seed=George" alt="George Fiance" class="w-20 h-20 rounded-full mb-2">
+                <img src="https://api.dicebear.com/6.x/avataaars/svg?seed=George" alt="George Fiance" class="w-20 h-20 rounded-full mb-2 border-4 border-purple-300">
                 <h3 class="text-xl font-semibold text-gray-800">George Fiance</h3>
                 <div class="text-yellow-400 flex mt-1">
                     <i class="fas fa-star"></i>
@@ -113,22 +118,21 @@
 </section>
 
 <!-- Call to Action -->
-<section id="cta" class="mb-20 text-center">
-    <h2 class="text-4xl font-bold mb-6 text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-indigo-600">
+<section id="cta" class="mb-20 text-center bg-gradient-to-r from-purple-500 to-indigo-500 py-16 rounded-3xl px-4">
+    <h2 class="text-4xl font-bold mb-6 text-white">
         Ready to Upgrade Your Tech?
     </h2>
-    <p class="text-xl text-gray-600 mb-10">
+    <p class="text-xl text-white mb-10">
         Join thousands of satisfied customers and experience the future of technology today.
     </p>
     {% if user.is_authenticated %}
-    <a href="{% url 'my_orders' %}" class="bg-gradient-to-r from-purple-500 to-indigo-500 text-white px-10 py-4 rounded-full text-lg hover:from-purple-600 hover:to-indigo-600 transition-all duration-300 transform hover:scale-105 inline-block shadow-lg">
+    <a href="{% url 'my_orders' %}" class="bg-white text-purple-600 px-10 py-4 rounded-full text-lg hover:bg-gray-100 transition-all duration-300 transform hover:scale-105 inline-block shadow-lg font-semibold">
         My Orders
     </a>
-{% else %}
-<a href="{% url 'register' %}" class="bg-gradient-to-r from-purple-500 to-indigo-500 text-white px-10 py-4 rounded-full text-lg hover:from-purple-600 hover:to-indigo-600 transition-all duration-300 transform hover:scale-105 inline-block shadow-lg">
-    Get Started
-</a>
-{% endif %}
-
+    {% else %}
+    <a href="{% url 'register' %}" class="bg-white text-purple-600 px-10 py-4 rounded-full text-lg hover:bg-gray-100 transition-all duration-300 transform hover:scale-105 inline-block shadow-lg font-semibold">
+        Get Started
+    </a>
+    {% endif %}
 </section>
 {% endblock %}

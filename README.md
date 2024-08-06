@@ -126,4 +126,7 @@ The frontend is built using HTML templates styled with Tailwind CSS. Key pages i
 
 This project serves as an excellent starting point for students and developers interested in building modern e-commerce web applications using Django. Feel free to explore, modify, and extend the code to suit your needs. If you encounter any issues or have questions, please refer to the Django documentation or seek help from the community.
 
-Happy coding!
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
