@@ -13,7 +13,6 @@ Welcome to eShop, an advanced student project built using Django 5.0.6. This pro
 - [Custom Management Commands](#custom-management-commands)
 - [Frontend](#frontend)
 - [Notes](#notes)
-- [Contributing](#contributing)
 - [License](#license)
 
 ## Features
