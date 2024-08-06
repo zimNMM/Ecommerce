@@ -33,14 +33,14 @@ urlpatterns = [
     path('remove-from-cart/<int:item_id>/', views.remove_from_cart, name='remove_from_cart'),
     path('clear-cart/', views.clear_cart, name='clear_cart'),
     path('checkout/', views.checkout, name='checkout'),
-    path('order-success/<str:order_id>/', views.order_success, name='order_success'),
+    path('order-success/<str:session_id>/', views.order_success, name='order_success'),
     path('my-orders/', views.my_orders, name='my_orders'),
     path('wishlist/', views.wishlist, name='wishlist'),
     path('add-to-wishlist/<str:product_id>/', views.add_to_wishlist, name='add_to_wishlist'),
     path('remove-from-wishlist/<str:product_id>/', views.remove_from_wishlist, name='remove_from_wishlist'),
     path('add-review/<str:product_id>/', views.add_review, name='add_review'),
     path('delete-review/<int:review_id>/', views.delete_review, name='delete_review'),
-    path('payment/<str:order_id>/', views.payment, name='payment'),
+    path('payment/', views.create_checkout_session, name='create_checkout_session'),
     path('about-us/', views.about_us, name='about_us'),
     path('contact/', views.contact, name='contact'),
     path('faq/', views.faq, name='faq'),
@@ -50,6 +50,7 @@ urlpatterns = [
     path('search/', views.search, name='search'),
     path('cancel-order/<str:order_id>/', views.cancel_order, name='cancel_order'),
     path('captcha/', include('captcha.urls')),
+    path('order-failure/', views.order_failure, name='order_failure'),
     ]
 
 if settings.DEBUG:

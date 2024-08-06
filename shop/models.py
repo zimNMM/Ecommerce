@@ -72,7 +72,6 @@ class CartItem(models.Model):
 
     def __str__(self):
         return f'{self.product.name} in cart of {self.cart.user.username}'
-
 class Order(models.Model):
     STATUS_CHOICES = (
         ('processing', 'Processing'),
@@ -96,7 +95,9 @@ class Order(models.Model):
         if not self.order_id:
             super().save(*args, **kwargs)
             self.order_id = f'ORDER{self.pk:06d}'
-        super().save(*args, **kwargs)
+            self.save()  # Save again to update order_id
+        else:
+            super().save(*args, **kwargs)
 #order item model with order and product as foreign keys and quantity field
 class OrderItem(models.Model):
     order = models.ForeignKey(Order, related_name='items', on_delete=models.CASCADE)

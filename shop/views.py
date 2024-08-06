@@ -9,7 +9,11 @@ from django.http import JsonResponse
 from django.db.models import Q
 from django.http import JsonResponse
 import json
-# Create your views here.
+import stripe
+from django.conf import settings
+
+stripe.api_key = settings.STRIPE_SECRET_KEY
+
 def search(request):
     query = request.GET.get('q')
     if query:
@@ -204,36 +208,34 @@ def clear_cart(request):
 def checkout(request):
     cart, _ = Cart.objects.get_or_create(user=request.user)
     cart_items = cart.items.all()
+    
+    # Calculate total price for each item
     for item in cart_items:
         item.total_price = item.product.price * item.quantity
-
+    
     total_price = sum(item.total_price for item in cart_items)
 
     if request.method == 'POST':
         form = OrderForm(request.POST)
         if form.is_valid():
-            order = form.save(commit=False)
-            order.user = request.user
-            order.status = 'processing'
-            order.save()
+            # Convert Decimal to float for JSON serialization
+            request.session['order_data'] = form.cleaned_data
+            request.session['cart_items'] = [
+                {
+                    'product_id': item.product.id,
+                    'name': item.product.name,
+                    'price': float(item.product.price),
+                    'quantity': item.quantity,
+                    'total_price': float(item.total_price)
+                }
+                for item in cart_items
+            ]
+            request.session['total_price'] = float(total_price)
 
-            for item in cart_items:
-                OrderItem.objects.create(
-                    order=order,
-                    product=item.product,
-                    quantity=item.quantity
-                )
-                item.product.quantity -= item.quantity
-                item.product.save()
-
-            cart.clear()
-
-            payment_method = request.POST.get('payment_method')
-            if payment_method == 'cod':
-                Payment.objects.create(order=order, method='cod')
-                return redirect('order_success', order_id=order.order_id)
+            if request.POST.get('payment_method') == 'cod':
+                return redirect('order_success', session_id='cod')
             else:
-                return redirect('payment', order_id=order.order_id)
+                return redirect('create_checkout_session')
     else:
         form = OrderForm()
 
@@ -243,32 +245,105 @@ def checkout(request):
         'total_price': total_price,
         'form': form
     })
-
 @login_required_user
-def payment(request, order_id):
-    order = get_object_or_404(Order, order_id=order_id)
-    if request.method == 'POST':
-        form = PaymentForm(request.POST)
-        if form.is_valid():
-            payment = form.save(commit=False)
-            payment.order = order
-            payment.method = 'card'
-            payment.save()
-            return redirect('order_success', order_id=order.order_id)
-    else:
-        form = PaymentForm()
+def create_checkout_session(request):
+    order_data = request.session.get('order_data')
+    cart_items = request.session.get('cart_items')
+    total_price = request.session.get('total_price')
 
-    return render(request, 'shop/payment.html', {
-        'order': order,
-        'form': form
-    })
-
-@login_required_user
-def order_success(request, order_id):
-    if request.user != Order.objects.get(order_id=order_id).user:
+    if not order_data or not cart_items:
         return redirect('index')
-    order = get_object_or_404(Order, order_id=order_id)
-    return render(request, 'shop/order_success.html', {'order': order})
+
+    line_items = [
+        {
+            'price_data': {
+                'currency': 'eur',
+                'product_data': {
+                    'name': item['name'],
+                },
+                'unit_amount': int(item['price'] * 100),
+            },
+            'quantity': item['quantity'],
+        }
+        for item in cart_items
+    ]
+
+    session = stripe.checkout.Session.create(
+        payment_method_types=['card'],
+        line_items=line_items,
+        mode='payment',
+        success_url=request.build_absolute_uri('/order-success/') + '{CHECKOUT_SESSION_ID}/',
+        cancel_url=request.build_absolute_uri('/order-failure/'),
+    )
+
+    return redirect(session.url, code=303)
+
+@login_required_user
+def order_success(request, session_id):
+    if session_id == 'cod':
+        order_data = request.session.pop('order_data', None)
+        cart_items = request.session.pop('cart_items', None)
+        total_price = request.session.pop('total_price', None)
+
+        if not order_data or not cart_items:
+            return redirect('index')
+
+        order = Order.objects.create(
+            user=request.user,
+            fullname=order_data['fullname'],
+            address=order_data['address'],
+            status='processing'
+        )
+
+        for item in cart_items:
+            product = Product.objects.get(id=item['product_id'])
+            OrderItem.objects.create(
+                order=order,
+                product=product,
+                quantity=item['quantity']
+            )
+            product.quantity -= item['quantity']
+            product.save()
+
+        cart = Cart.objects.get(user=request.user)
+        cart.clear()
+
+        return render(request, 'shop/order_success.html', {'order': order})
+
+    session = stripe.checkout.Session.retrieve(session_id)
+    if session.payment_status == 'paid':
+        order_data = request.session.pop('order_data', None)
+        cart_items = request.session.pop('cart_items', None)
+        total_price = request.session.pop('total_price', None)
+
+        if not order_data or not cart_items:
+            return redirect('index')
+
+        order = Order.objects.create(
+            user=request.user,
+            fullname=order_data['fullname'],
+            address=order_data['address'],
+            status='processing'
+        )
+
+        for item in cart_items:
+            product = Product.objects.get(id=item['product_id'])
+            OrderItem.objects.create(
+                order=order,
+                product=product,
+                quantity=item['quantity']
+            )
+            product.quantity -= item['quantity']
+            product.save()
+        cart = Cart.objects.get(user=request.user)
+        cart.clear()
+        return render(request, 'shop/order_success.html', {'order': order})
+
+    return redirect('order_failure')
+
+@login_required_user
+def order_failure(request):
+    return render(request, 'shop/order_failure.html')
 
 @login_required_user
 def wishlist(request):
