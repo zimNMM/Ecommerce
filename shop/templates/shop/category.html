@@ -1,38 +1,48 @@
 {% extends 'shop/base.html' %}
 {% block title %}{{ category.name }} - eShop{% endblock %}
 {% block content %}
-
-<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
     <div class="section text-center mb-16 animate-fade-in-down">
         <h1 class="text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-indigo-600 mb-6">
             {{ category.name }}
         </h1>
-        <p>{{ category.description }}</p>
+        <p class="text-xl text-gray-600 max-w-3xl mx-auto">{{ category.description }}</p>
     </div>
 
-    <div class="mb-8 flex justify-end">
-        <select id="sort-select" class="border rounded px-2 py-1">
-            <option value="price_asc">Price: Low to High</option>
-            <option value="price_desc">Price: High to Low</option>
-            <option value="name_asc">Name: A to Z</option>
-            <option value="name_desc">Name: Z to A</option>
-        </select>
+    <div class="mb-8 flex flex-col sm:flex-row justify-between items-center">
+        <p class="text-gray-600 mb-4 sm:mb-0">Showing {{ products|length }} product(s)</p>
+        <div class="relative">
+            <select id="sort-select" class="appearance-none bg-white border border-gray-300 rounded-full px-4 py-2 pr-8 leading-tight focus:outline-none focus:border-indigo-500 transition duration-300">
+                <option value="price_asc">Price: Low to High</option>
+                <option value="price_desc">Price: High to Low</option>
+                <option value="name_asc">Name: A to Z</option>
+                <option value="name_desc">Name: Z to A</option>
+            </select>
+            <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+                <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                    <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/>
+                </svg>
+            </div>
+        </div>
     </div>
 
     <div id="product-grid" class="grid grid-cols-1 gap-y-10 sm:grid-cols-2 gap-x-6 lg:grid-cols-3 xl:gap-x-8">
         {% for product in products %}
         <div class="bg-white shadow-lg rounded-lg overflow-hidden flex flex-col transition duration-300 ease-in-out transform hover:shadow-xl hover:-translate-y-1" data-price="{{ product.price }}" data-name="{{ product.name }}">
-            <a href="{% url 'product_detail' product.product_id %}" class="relative w-full h-64 bg-gray-200 overflow-hidden">
-                <img src="{{ product.image.url }}" alt="{{ product.name }}" class="w-full h-full object-contain transition duration-300 ease-in-out transform hover:scale-105">
+            <a href="{% url 'product_detail' product.product_id %}" class="relative w-full h-64 bg-gray-200 overflow-hidden group">
+                <img src="{{ product.image.url }}" alt="{{ product.name }}" class="w-full h-full object-contain transition duration-300 ease-in-out transform group-hover:scale-105">
+                <div class="absolute inset-0 bg-black bg-opacity-40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                    <span class="text-white text-lg font-semibold">View Details</span>
+                </div>
             </a>
             <div class="p-6 flex-grow flex flex-col justify-between">
                 <div>
                     <h3 class="text-xl font-semibold text-gray-900 mb-2">
                         <a href="{% url 'product_detail' product.product_id %}" class="hover:text-indigo-600 transition duration-300">{{ product.name }}</a>
                     </h3>
-                    <p>{{ product.description|truncatechars:100 }}</p>
-                    <p class="mt-2 text-lg font-bold text-indigo-600">{{ product.price }}€</p>
-                    <p>Available: {{ product.quantity }}</p>
+                    <p class="text-gray-600">{{ product.description|truncatechars:100 }}</p>
+                    <p class="mt-2 text-2xl font-bold text-indigo-600">{{ product.price }}€</p>
+                    <p class="text-sm text-gray-500">Available: {{ product.quantity }}</p>
                 </div>
                 <div class="mt-6 grid grid-cols-2 gap-3">
                     <form method="post" action="{% url 'add_to_cart' product.product_id %}">
@@ -42,13 +52,17 @@
                     {% if user.is_authenticated %}
                     <form method="post" action="{% url 'add_to_wishlist' product.product_id %}">
                         {% csrf_token %}
-                        <button type="submit" class="w-full bg-gray-200 text-gray-800 px-4 py-2 rounded-full hover:bg-gray-300 transition duration-300">Wishlist</button>
+                        <button type="submit" class="w-full bg-gray-200 text-gray-800 px-4 py-2 rounded-full hover:bg-gray-300 transition duration-300 transform hover:scale-105">Wishlist</button>
                     </form>
                     {% else %}
-                    <div></div>
+                    <a href="{% url 'login' %}" class="w-full bg-gray-200 text-gray-800 px-4 py-2 rounded-full hover:bg-gray-300 transition duration-300 transform hover:scale-105 text-center">Wishlist</a>
                     {% endif %}
                 </div>
             </div>
+        </div>
+        {% empty %}
+        <div class="col-span-full text-center py-12">
+            <p class="text-2xl text-gray-600">No products found in this category.</p>
         </div>
         {% endfor %}
     </div>
@@ -78,5 +92,4 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 </script>
-
 {% endblock %}

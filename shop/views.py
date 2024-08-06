@@ -348,6 +348,10 @@ def update_cart_item_quantity(request):
 def cancel_order(request, order_id):
     order = get_object_or_404(Order, order_id=order_id, user=request.user)
     if order.status == 'processing':
+        for order_item in order.items.all():
+            product = order_item.product
+            product.quantity += order_item.quantity
+            product.save()
         order.status = 'cancelled'
         order.save()
         messages.success(request, f"Order {order.order_id} has been cancelled.")
