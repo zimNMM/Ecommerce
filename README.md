@@ -101,6 +101,7 @@ In the admin panel, you can manage various aspects of the e-commerce platform:
   - `views.py`: View functions
   - `forms.py`: Form classes
   - `admin.py`: Admin panel configurations
+- `ecommerce/`: Settings and URLs
   - `urls.py`: URL patterns
 - `templates/`: HTML templates
 - `static/`: Static files (CSS, JavaScript, images)
