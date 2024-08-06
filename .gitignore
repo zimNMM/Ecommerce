@@ -1,9 +1,6 @@
-#ignroe cache files
 __pycache__/
-#ignore sqlite
 *.sqlite3
-#ignore media files and products
 media/products/
+media/categories/
 media/
-#igrnoe .DS_Store
 .DS_Store
