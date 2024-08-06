@@ -8,6 +8,8 @@ from .decorators import redirect_authenticated_user, login_required_user
 from .models import Order, OrderItem, Product, Cart, CartItem, Category,Wishlist,WishlistItem, Review, Payment, NewsletterSubscription
 from django.http import JsonResponse
 from django.db.models import Q
+from django.http import JsonResponse
+import json
 # Create your views here.
 def search(request):
     query = request.GET.get('q')
@@ -303,9 +305,6 @@ def contact(request):
     else:
         form = ContactForm()
     return render(request, 'shop/contact.html', {'form': form})
-
-from django.http import JsonResponse
-import json
 
 @login_required_user
 def update_cart_item_quantity(request):

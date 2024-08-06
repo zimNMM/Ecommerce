@@ -15,11 +15,11 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import include,path
+from django.urls import path, include
 from shop import views
 from django.conf import settings
 from django.conf.urls.static import static
-from shop.views import about_us
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.index, name='index'),
@@ -41,7 +41,7 @@ urlpatterns = [
     path('add-review/<str:product_id>/', views.add_review, name='add_review'),
     path('delete-review/<int:review_id>/', views.delete_review, name='delete_review'),
     path('payment/<str:order_id>/', views.payment, name='payment'),
-    path('about-us/', about_us, name='about_us'),
+    path('about-us/', views.about_us, name='about_us'),
     path('contact/', views.contact, name='contact'),
     path('faq/', views.faq, name='faq'),
     path('update-cart-item-quantity/', views.update_cart_item_quantity, name='update_cart_item_quantity'),
@@ -49,6 +49,7 @@ urlpatterns = [
     path('order/<str:order_id>/', views.order_detail, name='order_detail'),
     path('search/', views.search, name='search'),
     path('cancel-order/<str:order_id>/', views.cancel_order, name='cancel_order'),
+    path('captcha/', include('captcha.urls')),
     ]
 
 if settings.DEBUG:

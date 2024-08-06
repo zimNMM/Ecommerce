@@ -1,60 +1,91 @@
 {% extends 'shop/base.html' %}
-
-{% block title %}
-About Us - eShop Singapore
-{% endblock %}
-
+{% block title %}About Us - eShop Singapore{% endblock %}
 {% block content %}
-<section class="text-center mb-12">
-    <h1 class="text-4xl font-bold text-gray-800 mb-4">About eShop Singapore</h1>
-    <p class="text-gray-600 mb-6 max-w-2xl mx-auto">Your Ultimate Tech Destination in the Heart of Singapore</p>
-</section>
 
-<div class="grid grid-cols-1 md:grid-cols-2 gap-12 mb-12">
-    <div class="space-y-6">
-        <h2 class="text-2xl font-semibold text-indigo-600">Our Story</h2>
-        <p class="text-gray-700">Founded in 2015, eShop has quickly become Singapore's go-to destination for cutting-edge technology and gadgets. Our journey began with a simple vision: to provide tech enthusiasts and professionals with access to the latest innovations at competitive prices.</p>
-        <p class="text-gray-700">Today, we're proud to serve thousands of customers across Singapore, from individual consumers to large corporations, all while maintaining our commitment to quality, service, and innovation.</p>
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <section class="text-center mb-16 animate-fade-in-down">
+        <h1 class="text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-indigo-600 mb-6">About eShop Singapore</h1>
+        <p class="text-xl text-gray-600 mb-8 max-w-3xl mx-auto">Your Ultimate Tech Destination in the Heart of Singapore</p>
+    </section>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-12 mb-16">
+        <div class="space-y-6 animate-fade-in-left">
+            <h2 class="text-3xl font-semibold text-indigo-600">Our Story</h2>
+            <p class="text-gray-700">Founded in 2015, eShop has rapidly evolved into Singapore's premier destination for cutting-edge technology and gadgets. Our journey began with a simple yet powerful vision: to provide tech enthusiasts and professionals with unparalleled access to the latest innovations at competitive prices.</p>
+            <p class="text-gray-700">Today, we take pride in serving thousands of customers across Singapore, from individual consumers to large corporations, all while upholding our unwavering commitment to quality, exceptional service, and relentless innovation.</p>
+        </div>
+        <div class="space-y-6 animate-fade-in-right">
+            <h2 class="text-3xl font-semibold text-indigo-600">Our Mission</h2>
+            <p class="text-gray-700">At eShop, our mission transcends mere product sales. We are dedicated to empowering Singaporeans with the tools they need to thrive in the digital age. We firmly believe that technology should be accessible, understandable, and transformative for everyone.</p>
+            <p class="text-gray-700">Beyond offering products, we're nurturing a vibrant community of tech-savvy individuals and businesses, playing a pivotal role in solidifying Singapore's reputation as a global tech hub.</p>
+        </div>
     </div>
-    <div class="space-y-6">
-        <h2 class="text-2xl font-semibold text-indigo-600">Our Mission</h2>
-        <p class="text-gray-700">At eShop, our mission is to empower Singaporeans with the tools they need to thrive in the digital age. We believe that technology should be accessible, understandable, and transformative.</p>
-        <p class="text-gray-700">We're not just selling products; we're fostering a community of tech-savvy individuals and businesses, driving Singapore's reputation as a global tech hub.</p>
+
+    <div class="bg-gradient-to-r from-purple-100 to-indigo-100 p-8 rounded-2xl mb-16 shadow-lg animate-fade-in-up">
+        <h2 class="text-3xl font-semibold text-indigo-600 mb-6">Why Choose eShop?</h2>
+        <ul class="grid grid-cols-1 md:grid-cols-2 gap-4 text-gray-700">
+            <li class="flex items-center">
+                <svg class="h-6 w-6 text-green-500 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                </svg>
+                Curated selection of premium tech products
+            </li>
+            <li class="flex items-center">
+                <svg class="h-6 w-6 text-green-500 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                </svg>
+                Expert staff providing personalized advice
+            </li>
+            <li class="flex items-center">
+                <svg class="h-6 w-6 text-green-500 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                </svg>
+                Competitive pricing and regular promotions
+            </li>
+            <li class="flex items-center">
+                <svg class="h-6 w-6 text-green-500 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                </svg>
+                Fast and reliable delivery across Singapore
+            </li>
+            <li class="flex items-center">
+                <svg class="h-6 w-6 text-green-500 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                </svg>
+                Excellent after-sales support and warranty services
+            </li>
+        </ul>
     </div>
-</div>
 
-<div class="bg-gray-100 p-8 rounded-lg mb-12">
-    <h2 class="text-2xl font-semibold text-indigo-600 mb-4">Why Choose eShop?</h2>
-    <ul class="list-disc list-inside space-y-2 text-gray-700">
-        <li>Curated selection of premium tech products</li>
-        <li>Expert staff ready to provide personalized advice</li>
-        <li>Competitive pricing and regular promotions</li>
-        <li>Fast and reliable delivery across Singapore</li>
-        <li>Excellent after-sales support and warranty services</li>
-    </ul>
-</div>
+    <section class="mb-16 animate-fade-in-up">
+        <h2 class="text-3xl font-semibold text-indigo-600 mb-6">Visit Our Flagship Store</h2>
+        <p class="text-gray-700 mb-8">Experience our cutting-edge products firsthand at our flagship store, located in the heart of Singapore's vibrant tech district.</p>
+        <div id="map" class="mx-auto rounded-lg shadow-lg" style="height: 400px; width: 100%;"></div>
+    </section>
 
-<section class="mb-12">
-    <h2 class="text-2xl font-semibold text-indigo-600 mb-4">Visit Our Store</h2>
-    <p class="text-gray-700 mb-6">Experience our products firsthand at our flagship store in the heart of Singapore's tech district.</p>
-    <div id="map" class="mx-auto" style="height: 400px; width: 100%;"></div>
-</section>
+    <section class="text-center animate-fade-in-up">
+        <h2 class="text-3xl font-semibold text-indigo-600 mb-6">Join the eShop Community</h2>
+        <p class="text-xl text-gray-700 mb-8">Be part of Singapore's most exciting tech community. Stay updated with the latest innovations, exclusive offers, and tech events.</p>
+        <a href="{% url 'register' %}" class="bg-gradient-to-r from-purple-500 to-indigo-600 text-white font-bold px-8 py-3 rounded-full transition duration-300 ease-in-out transform hover:scale-105 inline-block">Join Now</a>
+    </section>
+</div>
 
 <!-- Leaflet CSS and JS -->
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
 <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
 <script>
-document.addEventListener('DOMContentLoaded', function() {
-    if (!window.mapInitialized) {
-        window.mapInitialized = true;
-        var mymap = L.map('map').setView([1.2956, 103.8506], 15); // Singapore coordinates
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            maxZoom: 19,
-            attribution: '© OpenStreetMap contributors'
-        }).addTo(mymap);
-        var marker = L.marker([1.2956, 103.8506]).addTo(mymap)
-            .bindPopup('eShop Singapore Flagship Store');
-    }
-});
+    document.addEventListener('DOMContentLoaded', function() {
+        if (!window.mapInitialized) {
+            window.mapInitialized = true;
+            var mymap = L.map('map').setView([1.2956, 103.8506], 15); // Singapore coordinates
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                maxZoom: 19,
+                attribution: '© OpenStreetMap contributors'
+            }).addTo(mymap);
+            var marker = L.marker([1.2956, 103.8506]).addTo(mymap)
+                .bindPopup('eShop Singapore Flagship Store');
+        }
+    });
 </script>
+
 {% endblock %}

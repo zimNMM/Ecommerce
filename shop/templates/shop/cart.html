@@ -11,7 +11,7 @@
             {% if messages %}
             <div class="mb-8 space-y-4" x-show="showCartMessages">
                 {% for message in messages %}
-                <div class="p-4 text-sm {{ message.tags }}-500 bg-{{ message.tags }}-100 rounded-lg shadow-md animate-fade-in-up">
+                <div class="p-4 text-sm {{ message.tags }}-500 bg-{{ message.tags }}-100 rounded-lg shadow-md animate-fade-in-up relative">
                     {{ message }}
                     <button @click="showCartMessages = false" class="absolute top-2 right-2 text-gray-500 hover:text-gray-700 focus:outline-none">
                         <i class="fas fa-times"></i>

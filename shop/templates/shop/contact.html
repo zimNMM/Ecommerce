@@ -6,60 +6,73 @@
 <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
     <section class="mb-16 animate-fade-in-down">
         <h1 class="text-3xl md:text-4xl lg:text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-indigo-600 mb-8 text-center">Get in Touch</h1>
-        
-        {% if messages %}
-            <div class="mb-6">
-                {% for message in messages %}
-                    <div class="bg-green-100 border-l-4 border-green-500 text-green-700 p-4 rounded-md shadow-md" role="alert">
-                        <p class="font-medium">Success!</p>
-                        <p>{{ message }}</p>
-                    </div>
-                {% endfor %}
-            </div>
-        {% endif %}
 
-        <div class="bg-white shadow-2xl rounded-lg p-8 md:p-10">
+        <div class="bg-white shadow-2xl rounded-lg p-8 md:p-10 transform hover:scale-105 transition-all duration-300">
             <p class="text-gray-600 text-center mb-8">We'd love to hear from you! Please fill out the form below and we'll get back to you as soon as possible.</p>
-            <form method="post" class="space-y-6">
+            <form method="post" class="space-y-6" x-data="{ name: '', email: '', message: '' }">
                 {% csrf_token %}
-                <div class="relative">
-                    <label for="id_name" class="block text-sm font-medium text-gray-700 mb-1">Your Name</label>
+                <div class="relative" x-data="{ focused: false }">
+                    <label for="id_name" class="block text-sm font-medium text-gray-700 mb-1" :class="{ 'text-indigo-600': focused }">Your Name</label>
                     <div class="relative rounded-md shadow-sm">
                         <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                            <i class="fas fa-user text-gray-400"></i>
+                            <i class="fas fa-user" :class="{ 'text-gray-400': !focused, 'text-indigo-600': focused }"></i>
                         </div>
-                        <input type="text" name="name" id="id_name" value="{{ form.name.value|default:'' }}" class="block w-full pl-10 pr-3 py-2 rounded-md border-gray-300 focus:ring-indigo-500 focus:border-indigo-500" placeholder="John Doe">
+                        <input type="text" name="name" id="id_name" x-model="name" @focus="focused = true" @blur="focused = false" 
+                               class="block w-full pl-10 pr-3 py-2 rounded-md border-gray-300 focus:ring-indigo-500 focus:border-indigo-500 transition-all duration-300" 
+                               :class="{ 'border-indigo-500 ring-2 ring-indigo-200': focused }"
+                               placeholder="John Doe">
                     </div>
                     {% if form.name.errors %}
                         <p class="mt-2 text-sm text-red-600">{{ form.name.errors }}</p>
                     {% endif %}
                 </div>
-                <div class="relative">
-                    <label for="id_email" class="block text-sm font-medium text-gray-700 mb-1">Your Email</label>
+                <div class="relative" x-data="{ focused: false }">
+                    <label for="id_email" class="block text-sm font-medium text-gray-700 mb-1" :class="{ 'text-indigo-600': focused }">Your Email</label>
                     <div class="relative rounded-md shadow-sm">
                         <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                            <i class="fas fa-envelope text-gray-400"></i>
+                            <i class="fas fa-envelope" :class="{ 'text-gray-400': !focused, 'text-indigo-600': focused }"></i>
                         </div>
-                        <input type="email" name="email" id="id_email" value="{{ form.email.value|default:'' }}" class="block w-full pl-10 pr-3 py-2 rounded-md border-gray-300 focus:ring-indigo-500 focus:border-indigo-500" placeholder="johndoe@example.com">
+                        <input type="email" name="email" id="id_email" x-model="email" @focus="focused = true" @blur="focused = false" 
+                               class="block w-full pl-10 pr-3 py-2 rounded-md border-gray-300 focus:ring-indigo-500 focus:border-indigo-500 transition-all duration-300" 
+                               :class="{ 'border-indigo-500 ring-2 ring-indigo-200': focused }"
+                               placeholder="johndoe@example.com">
                     </div>
                     {% if form.email.errors %}
                         <p class="mt-2 text-sm text-red-600">{{ form.email.errors }}</p>
                     {% endif %}
                 </div>
-                <div class="relative">
-                    <label for="id_message" class="block text-sm font-medium text-gray-700 mb-1">Your Message</label>
+                <div class="relative" x-data="{ focused: false }">
+                    <label for="id_message" class="block text-sm font-medium text-gray-700 mb-1" :class="{ 'text-indigo-600': focused }">Your Message</label>
                     <div class="relative rounded-md shadow-sm">
                         <div class="absolute top-3 left-3 pointer-events-none">
-                            <i class="fas fa-comment text-gray-400"></i>
+                            <i class="fas fa-comment" :class="{ 'text-gray-400': !focused, 'text-indigo-600': focused }"></i>
                         </div>
-                        <textarea name="message" id="id_message" rows="5" class="block w-full pl-10 pr-3 py-2 rounded-md border-gray-300 focus:ring-indigo-500 focus:border-indigo-500" placeholder="How can we help you?">{{ form.message.value|default:'' }}</textarea>
+                        <textarea name="message" id="id_message" x-model="message" @focus="focused = true" @blur="focused = false" rows="5" 
+                                  class="block w-full pl-10 pr-3 py-2 rounded-md border-gray-300 focus:ring-indigo-500 focus:border-indigo-500 transition-all duration-300" 
+                                  :class="{ 'border-indigo-500 ring-2 ring-indigo-200': focused }"
+                                  placeholder="How can we help you?"></textarea>
                     </div>
                     {% if form.message.errors %}
                         <p class="mt-2 text-sm text-red-600">{{ form.message.errors }}</p>
                     {% endif %}
                 </div>
+                <div class="relative" x-data="{ focused: false }">
+                    <label for="id_captcha" class="block text-sm font-medium text-gray-700 mb-1" :class="{ 'text-indigo-600': focused }">CAPTCHA</label>
+                    <div class="relative rounded-md shadow-sm">
+                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                            <i class="fas fa-shield-alt" :class="{ 'text-gray-400': !focused, 'text-indigo-600': focused }"></i>
+                        </div>
+                        {{ form.captcha }}
+                    </div>
+                    {% if form.captcha.errors %}
+                        <p class="mt-2 text-sm text-red-600">{{ form.captcha.errors }}</p>
+                    {% endif %}
+                </div>
                 <div class="text-center">
-                    <button type="submit" class="inline-flex items-center px-8 py-3 border border-transparent text-base font-medium rounded-full text-white bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-all duration-300 ease-in-out transform hover:scale-105 shadow-lg">
+                    <button type="submit" 
+                            class="inline-flex items-center px-8 py-3 border border-transparent text-base font-medium rounded-full text-white bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-all duration-300 ease-in-out transform hover:scale-105 shadow-lg"
+                            :class="{ 'opacity-50 cursor-not-allowed': !name || !email || !message }"
+                            :disabled="!name || !email || !message">
                         <i class="fas fa-paper-plane mr-2"></i> Send Message
                     </button>
                 </div>
@@ -74,5 +87,15 @@
         to { opacity: 1; transform: translateY(0); }
     }
     .animate-fade-in-down { animation: fadeInDown 1s ease-out; }
+
+    #id_captcha_1 {
+        @apply block w-full pl-10 pr-3 py-2 rounded-md border-gray-300 focus:ring-indigo-500 focus:border-indigo-500 transition-all duration-300;
+    }
+    #id_captcha_1:focus {
+        @apply border-indigo-500 ring-2 ring-indigo-200;
+    }
+    .captcha {
+        @apply mt-2;
+    }
 </style>
 {% endblock %}

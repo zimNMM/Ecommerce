@@ -1,13 +1,14 @@
 from django import forms
 from .models import Order, Payment, Contact
 from .models import NewsletterSubscription
-
+from captcha.fields import CaptchaField
 class NewsletterForm(forms.ModelForm):
     class Meta:
         model = NewsletterSubscription
         fields = ['email']
 
 class ContactForm(forms.ModelForm):
+    captcha = CaptchaField()
     class Meta:
         model = Contact
         fields = ['name', 'email', 'message']
